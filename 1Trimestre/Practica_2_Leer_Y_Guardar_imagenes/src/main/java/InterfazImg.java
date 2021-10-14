@@ -2,7 +2,9 @@
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -183,7 +185,16 @@ public class InterfazImg extends javax.swing.JFrame {
             String nuevaRuta = nuevoNombre.getAbsolutePath();
             txtSave.setText(nuevaRuta);
             
-            Files.copy(nuevoNombre,nuevaRuta);
+            // Pasamos los strings a rutas 
+            Path origen = FileSystems.getDefault().getPath(ruta);
+            Path destino = FileSystems.getDefault().getPath(nuevaRuta);
+            
+            
+            try {
+                Files.copy(origen, destino);
+            } catch (IOException ex) {
+                Logger.getLogger(InterfazImg.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         
