@@ -1,8 +1,13 @@
 
 import java.awt.TextField;
 import java.io.Closeable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -378,12 +383,22 @@ public class IntroducirDatos extends javax.swing.JDialog {
         Clientes cliente = new Clientes(profesion,edad,nhermanos,sexo,deporte,compras,television,cine);
         PreparedStatement ps = null;
         String sql;
-        Connection conexion = conectar.getConnection();
-        sql ="insert into usuarios(profesion,edad,hermanos,sexo,deportes,compras,television,cine)"
-                + "values()";
+        Connection conexion = new Conectar().getConnection();
         
         try {
-           ps= conexion.prepareStatement(sql);
+             sql ="insert into usuarios(profesion,edad,hermanos,sexo,deportes,compras,television,cine) values(?,?,?,?,?,?,?,?)";
+                   
+           ps = conexion.prepareStatement(sql);
+           
+           ps.setString(1, profesion);
+           ps.setString(2, edad);
+           ps.setInt(3, nhermanos);
+           ps.setString(4,sexo);
+           ps.setString(5, deporte);
+           ps.setInt(6, compras);
+           ps.setInt(7, television);
+           ps.setInt(8, cine);
+           
             
             ps.executeUpdate();
         } catch (SQLException ex) {

@@ -43,6 +43,7 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
     
      listaclientes.add(clientes);
      refrescarTabla();
+       
     }
     private void refrescarTabla() throws SQLException{
         DefaultTableModel dtm = new DefaultTableModel();
@@ -141,8 +142,8 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
             
     private void anadirUsuario() throws SQLException{
         /*IntroducirDatos intDatos = new IntroducirDatos (this,true);
-        intDatos.setVisible(true);
-        refrescarTabla();*/
+        intDatos.setVisible(true);*/
+        refrescarTabla();
         
         
     }
@@ -245,7 +246,11 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
         // TODO add your handling code here:
         IntroducirDatos intDatos = new IntroducirDatos (this, true);
         intDatos.setVisible(true);
-        //refrescarTabla();
+        try {
+            refrescarTabla();
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaPrinciapl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItemAltasActionPerformed
         
     /**
