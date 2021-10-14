@@ -112,7 +112,7 @@ public class pantallaPtincipal extends javax.swing.JFrame {
                 + "values('EL PEPE',55,3,'Hombre','Tenis',4,7,9)";
         
         try {
-           ps= conexion.prepareStatement(sql);
+           ps = conexion.prepareStatement(sql);
             
             ps.executeUpdate();
         } catch (SQLException ex) {
