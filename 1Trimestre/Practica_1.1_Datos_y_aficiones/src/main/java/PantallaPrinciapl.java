@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 public class PantallaPrinciapl extends javax.swing.JFrame {
     List<Clientes> listaclientes = new ArrayList<Clientes>();
     Conectar conectar = null;
+    PreparedStatement ps = null;
     /**
      * Creates new form PantallaPrinciapl
      */
@@ -149,20 +150,37 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
     }
     
     private void eliminarUsuario() throws SQLException{ 
-        /*if (jTableDatos.getSelectedRowCount() == 0) {
+        if (jTableDatos.getSelectedRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una fila, Gracias","Error",JOptionPane.WARNING_MESSAGE);
         }else{
+            
+            
+            
             int result =  JOptionPane.showConfirmDialog(this, "¿Estas seguro de eliminar el usuario?","¿Seguro?",JOptionPane.YES_NO_CANCEL_OPTION);
             if (result == JOptionPane.YES_OPTION){
-                listaclientes.remove(jTableDatos.getSelectedRow());
+                
+                String id = jTableDatos.getValueAt(jTableDatos.getSelectedRow(), 0).toString();
+                
+                conectar = new Conectar();
+                Connection conexion = conectar.getConnection();
+                                
+                String SQL = "DELETE FROM aficiones.usuarios WHERE idusuarios='"+id+"'"; 
+
+                ps = conexion.prepareStatement(SQL);
+                ps.execute();
+                
                 refrescarTabla();
+                
+                JOptionPane.showMessageDialog(null, "¡El usuario fué eliminado!");
+                
             }else{
+                
             JOptionPane.showConfirmDialog(this,"Fila no borrada","",JOptionPane.ERROR_MESSAGE);
             
             }
             
             
-        }*/
+        }
         
     }
     
@@ -170,8 +188,17 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
         
         int result =  JOptionPane.showConfirmDialog(this, "¿Estas seguro de eliminar toda la tabla?","¿Seguro?",JOptionPane.YES_NO_CANCEL_OPTION);
         if (result == JOptionPane.YES_OPTION){
-        listaclientes.clear();
-        refrescarTabla();
+            
+            
+            conectar = new Conectar();
+            Connection conexion = conectar.getConnection();
+            
+            String SQL = "DELETE FROM aficiones.usuarios";
+            ps = conexion.prepareStatement(SQL);
+            ps.execute();
+                
+            refrescarTabla();
+            JOptionPane.showMessageDialog(null, "La tabla se a eliminado");
         }
         
     }
