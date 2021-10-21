@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,9 +20,11 @@ import javax.swing.table.DefaultTableModel;
  * @author damA
  */
 public class Directores extends javax.swing.JDialog {
-List<Directores> lstDirectores = new ArrayList<Directores>();
+
+    List<Directores> lstDirectores = new ArrayList<Directores>();
     Conexion_BD_Cine conectar = null;
     PreparedStatement ps = null;
+
     /**
      * Creates new form Directores
      */
@@ -33,43 +33,38 @@ List<Directores> lstDirectores = new ArrayList<Directores>();
         initComponents();
         RefrescarDirectores();
     }
-private void RefrescarDirectores() throws SQLException {
+
+    public void RefrescarDirectores() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
-        dtm.setColumnIdentifiers(new String[]{"Id Director","Nombre","Apellidos","Fecha Nacimiento"});
-        
-        
-        
+        dtm.setColumnIdentifiers(new String[]{"Id Director", "Nombre", "Apellidos", "Fecha Nacimiento"});
+
         //for (Clientes cliente: listaclientes){
         //    dtm.addRow(cliente.toArrayString());
         //}
-        
-       
-        
         conectar = new Conexion_BD_Cine();
         Connection conexion = conectar.getConnection();
         if (conexion != null) {
-            
+
             Statement s = conexion.createStatement();
             ResultSet rs = s.executeQuery("select * from cine_di.director");
-                       
+
             String peli[] = new String[8];
-                       
-           
+
             while (rs.next()) {
                 peli[0] = rs.getString(1);
                 peli[1] = rs.getString(2);
                 peli[2] = rs.getString(3);
                 peli[3] = rs.getString(4);
-                
+
                 dtm.addRow(peli);
             }
             jTablePelis.setModel(dtm);
-                                    
-        }
-        else{
+
+        } else {
             JOptionPane.showMessageDialog(this, "conexion fallida");
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,7 +115,6 @@ private void RefrescarDirectores() throws SQLException {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -128,5 +122,4 @@ private void RefrescarDirectores() throws SQLException {
     private javax.swing.JTable jTablePelis;
     // End of variables declaration//GEN-END:variables
 
-    
 }

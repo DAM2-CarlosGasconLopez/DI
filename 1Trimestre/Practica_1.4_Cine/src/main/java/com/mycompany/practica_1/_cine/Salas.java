@@ -31,14 +31,20 @@ public class Salas extends javax.swing.JDialog {
      * Creates new form Salas
      */
     public Salas(java.awt.Frame parent, boolean modal) {
+        
         super(parent, modal);
         initComponents();
         try {
             RefrescarSalas();
         } catch (SQLException ex) {
-            Logger.getLogger(Peliculas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Salas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
+
+
+    
     
     private void RefrescarSalas() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
@@ -79,13 +85,7 @@ public class Salas extends javax.swing.JDialog {
     
     
 
-    
-    
-    
-    
-    
-    
-    
+  
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -157,6 +157,13 @@ public class Salas extends javax.swing.JDialog {
     private void jMenuAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAddActionPerformed
         AddSala sala = new AddSala (null, true);
         sala.setVisible(true);
+        
+        try {
+            RefrescarSalas();
+        } catch (SQLException ex) {
+            
+        }
+              
     }//GEN-LAST:event_jMenuAddActionPerformed
 
     /**
