@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,9 @@ public class Peliculas extends javax.swing.JDialog {
             Logger.getLogger(Peliculas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+
+  
     
     public void RefrescarPeliculas() throws SQLException{
         DefaultTableModel dtm = new DefaultTableModel();
@@ -161,7 +165,12 @@ public class Peliculas extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        AddPeliculas nuevaPelicula = new AddPeliculas(null, true);
+        AddPeliculas nuevaPelicula = null;
+        try {
+            nuevaPelicula = new AddPeliculas(null, true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Peliculas.class.getName()).log(Level.SEVERE, null, ex);
+        }
         nuevaPelicula.setVisible(true);
         
         try {

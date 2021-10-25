@@ -7,12 +7,19 @@ package Añadir;
 
 import com.mycompany.practica_1._cine.Conexion_BD_Cine;
 import com.mycompany.practica_1._cine.Directores;
+import com.mycompany.practica_1._cine.Peliculas;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,7 +29,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AddPeliculas extends javax.swing.JDialog {
 
-    List<Directores> directores = new ArrayList<Directores>();
     /**
      * Creates new form AddPeliculas
      */
@@ -30,6 +36,9 @@ public class AddPeliculas extends javax.swing.JDialog {
         
         super(parent, modal);
         initComponents();
+        RefrescarDirectores();
+        RefrescarTematica();
+        RefrescarSala();
         
         
     }
@@ -75,8 +84,6 @@ public class AddPeliculas extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Director");
 
-        cbDirector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Fecha Proyección");
 
@@ -93,8 +100,6 @@ public class AddPeliculas extends javax.swing.JDialog {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Temática");
 
-        cbTematica.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("precioEntrada");
 
@@ -102,8 +107,6 @@ public class AddPeliculas extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Sala");
-
-        cbSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton1.setText("Insertar nueva Pelicula");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +183,7 @@ public class AddPeliculas extends javax.swing.JDialog {
                     .addComponent(cbSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(jButton1)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -188,9 +191,120 @@ public class AddPeliculas extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
+        if (txtTitulo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Porfavor, inserte el titulo de la pelicula","Error", JOptionPane.ERROR_MESSAGE);
+            
+        }else{
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy");
+
+            
+            
+            
+            String titulo = txtTitulo.getText();
+            String director = cbDirector.getSelectedItem().toString();
+            String fecha = simpleDateFormat.format(spinnerFecha.getValue()).toString();
+            String año = simpleDateFormat2.format(spinnerAño.getValue()).toString();
+            String tematica = cbTematica.getSelectedItem().toString();
+            String precio =  spinnerPrecio.getValue().toString();
+            String sala = cbSala.getSelectedItem().toString();
+            
+            String[] array = director.split(",");
+            director = array[0];
+            String[] array1 = tematica.split(",");
+            tematica = array1[0];
+            String[] array2 = sala.split(",");
+            sala = array2[0];
+        
+        PreparedStatement ps = null;
+        String sql;
+        Connection conexion = new Conexion_BD_Cine().getConnection();
+        
+        try {
+             sql ="insert into pelicula(titulo,director,fechaProyeccion,añoEstreno,tematica,precioEntrada,sala) values(?,?,?,?,?,?,?)";
+             
+                   
+           ps = conexion.prepareStatement(sql);
+           
+           
+           ps.setString(1,titulo);
+           ps.setString(2,director);
+           ps.setString(3,fecha);
+           ps.setString(4,año);
+           ps.setString(5,tematica);
+           ps.setString(6,precio );
+           ps.setString(7,sala);
+           
+
+           ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Peliculas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            dispose();
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void RefrescarSala() throws SQLException{
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(new String[]{"Id Sala", "Nombre", "Capacidad"});
+
+        //for (Clientes cliente: listaclientes){
+        //    dtm.addRow(cliente.toArrayString());
+        //}
+        Conexion_BD_Cine conectar = new Conexion_BD_Cine();
+        Connection conexion = conectar.getConnection();
+        if (conexion != null) {
+
+            Statement s = conexion.createStatement();
+            ResultSet rs = s.executeQuery("select * from cine_di.sala");
+
+            String sala[] = new String[4];
+
+            while (rs.next()) {
+                sala[0] = rs.getString(1);
+                sala[1] = rs.getString(2);
+                sala[2] = rs.getString(3);
+
+                cbSala.addItem(sala[0]+", " + sala[1]);
+            }
+            
+
+        } else {
+            JOptionPane.showMessageDialog(this, "conexion fallida");
+        }
+    }
+    public void RefrescarTematica() throws SQLException{
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(new String[]{"Id Tematica", "Nombre",});
+
+        //for (Clientes cliente: listaclientes){
+        //    dtm.addRow(cliente.toArrayString());
+        //}
+        Conexion_BD_Cine conectar = new Conexion_BD_Cine();
+        Connection conexion = conectar.getConnection();
+        if (conexion != null) {
+
+            Statement s = conexion.createStatement();
+            ResultSet rs = s.executeQuery("select * from cine_di.tematica");
+
+            String tem[] = new String[4];
+
+            while (rs.next()) {
+                tem[0] = rs.getString(1);
+                tem[1] = rs.getString(2);
+                
+
+                cbTematica.addItem(tem[0]+", " + tem[1]);
+            }
+            
+
+        } else {
+            JOptionPane.showMessageDialog(this, "conexion fallida");
+        }
+    }
     public void RefrescarDirectores() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
         dtm.setColumnIdentifiers(new String[]{"Id Director", "Nombre", "Apellidos", "Fecha Nacimiento"});
@@ -198,14 +312,14 @@ public class AddPeliculas extends javax.swing.JDialog {
         //for (Clientes cliente: listaclientes){
         //    dtm.addRow(cliente.toArrayString());
         //}
-        conectar = new Conexion_BD_Cine();
+        Conexion_BD_Cine conectar = new Conexion_BD_Cine();
         Connection conexion = conectar.getConnection();
         if (conexion != null) {
 
             Statement s = conexion.createStatement();
             ResultSet rs = s.executeQuery("select * from cine_di.director");
 
-            String peli[] = new String[8];
+            String peli[] = new String[4];
 
             while (rs.next()) {
                 peli[0] = rs.getString(1);
@@ -213,14 +327,17 @@ public class AddPeliculas extends javax.swing.JDialog {
                 peli[2] = rs.getString(3);
                 peli[3] = rs.getString(4);
 
-                dtm.addRow(peli);
+                cbDirector.addItem(peli[0]+", " + peli[1]);
             }
-            jTablePelis.setModel(dtm);
+            
 
         } else {
             JOptionPane.showMessageDialog(this, "conexion fallida");
         }
+
     }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbDirector;
     private javax.swing.JComboBox<String> cbSala;
@@ -240,4 +357,10 @@ public class AddPeliculas extends javax.swing.JDialog {
     private javax.swing.JSpinner spinnerPrecio;
     private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
+
+    private Object DateFormat(Object value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }

@@ -7,6 +7,7 @@ package com.mycompany.practica_1._cine;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -27,6 +28,10 @@ public class Conexion_BD_Cine {
             System.out.println("ERROR: " + ex.getMessage());
         }
         return con;
+    }
+
+    public PreparedStatement prepareStatement(String sql) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
