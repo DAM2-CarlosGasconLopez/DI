@@ -24,24 +24,29 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
-              <Component id="jRelojDigital2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="196" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+              <Component id="jRelojDigital1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="130" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-              <Component id="jRelojDigital2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="232" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="119" max="32767" attributes="0"/>
+              <Component id="jRelojDigital1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.mycompany.practica_3._jrelojdigital.jRelojDigital" name="jRelojDigital2">
+    <Component class="jreloj.jRelojDigital" name="jRelojDigital1">
+      <Properties>
+        <Property name="alarma" type="jreloj.propiedadAlarma" editor="jreloj.alarmaPropertyEditorSupport">
+          <SerializedValue value="-84,-19,0,5,115,114,0,22,106,114,101,108,111,106,46,112,114,111,112,105,101,100,97,100,65,108,97,114,109,97,80,119,-29,71,69,-37,-58,21,2,0,2,90,0,7,97,99,116,105,118,97,114,76,0,5,102,101,99,104,97,116,0,16,76,106,97,118,97,47,117,116,105,108,47,68,97,116,101,59,120,112,1,115,114,0,14,106,97,118,97,46,117,116,105,108,46,68,97,116,101,104,106,-127,1,75,89,116,25,3,0,0,120,112,119,8,0,0,1,125,11,15,108,-96,120"/>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -5,6 +5,9 @@
  */
 package com.mycompany.practica_3._prueba;
 
+import javax.swing.JOptionPane;
+import jreloj.iAlarma;
+
 /**
  *
  * @author damA
@@ -16,8 +19,17 @@ public class jReloj extends javax.swing.JFrame {
      */
     public jReloj() {
         initComponents();
+        jRelojDigital1.setSonarListener(new iAlarma() {
+            @Override
+            public void sonarAlarma() {
+                JOptionPane.showMessageDialog(null,"HORA DE DESPERTARSE !!!","Alarma",JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        
     }
 
+   
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,25 +39,27 @@ public class jReloj extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jRelojDigital2 = new com.mycompany.practica_3._jrelojdigital.jRelojDigital();
+        jRelojDigital1 = new jreloj.jRelojDigital();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jRelojDigital1.setAlarma(new jreloj.propiedadAlarma(new java.util.Date(1636568100000l),true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(162, 162, 162)
-                .addComponent(jRelojDigital2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addGap(75, 75, 75)
+                .addComponent(jRelojDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jRelojDigital2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(232, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(119, Short.MAX_VALUE)
+                .addComponent(jRelojDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(117, 117, 117))
         );
 
         pack();
@@ -87,6 +101,6 @@ public class jReloj extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.practica_3._jrelojdigital.jRelojDigital jRelojDigital2;
+    private jreloj.jRelojDigital jRelojDigital1;
     // End of variables declaration//GEN-END:variables
 }
