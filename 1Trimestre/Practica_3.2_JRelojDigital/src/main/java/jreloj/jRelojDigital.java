@@ -76,13 +76,14 @@ public class jRelojDigital extends JLabel implements Serializable {
 
     public jRelojDigital() {
         
-        Timer timer = new Timer(1000,new ActionListener() {
+        Timer timer ;
+        timer = new Timer(1000,new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 Date date = new Date();
                 if (formato24) {
-                  setText(sdf24h.format(date));
-                
+                    setText(sdf24h.format(date));
+                    
                 }else{
                     setText(sdf12h.format(date));
                 }
@@ -100,18 +101,19 @@ public class jRelojDigital extends JLabel implements Serializable {
 
             private boolean comprobarHoras(Date date, Date fecha) {
                 
-                Calendar date1 = Calendar.getInstance(); 
-                Calendar date2 = Calendar.getInstance(); 
-                date1.setTime(date);
-                date2.setTime(fecha);
+                Calendar Actual = Calendar.getInstance();
+                Calendar Alarma = Calendar.getInstance();
+                Actual.setTime(date);
+                Alarma.setTime(fecha);
                 
-                if (date1.get(Calendar.HOUR)==date2.get(Calendar.HOUR) && date1.get(Calendar.MINUTE)==date2.get(Calendar.MINUTE) && date1.get(Calendar.SECOND)==date2.get(Calendar.SECOND)) {
+                if (Actual.get(Calendar.HOUR)==Alarma.get(Calendar.HOUR) && Actual.get(Calendar.MINUTE)==Alarma.get(Calendar.MINUTE) && Actual.get(Calendar.SECOND)==Alarma.get(Calendar.SECOND)) /*&&
+                        Actual.get(Calendar.HOUR_OF_DAY)==Alarma.get(Calendar.HOUR_OF_DAY)*/ {
                     return true;
                 }else{
                     return false;
                 }
             }
-        }) ;
+        });
         timer.start();
     }
     
