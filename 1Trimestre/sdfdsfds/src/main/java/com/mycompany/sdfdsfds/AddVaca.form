@@ -23,7 +23,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
@@ -37,20 +37,24 @@
                       </Group>
                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cbRaza" min="-2" max="-2" attributes="0"/>
                           <Component id="spinnerCrotal" min="-2" max="-2" attributes="0"/>
                           <Component id="cbEstado" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="spinnerPartos" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="spinnerEntrada" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="spinnerNacimiento" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbRaza" alignment="0" pref="154" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <Component id="btnAñadir" min="-2" pref="171" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -59,7 +63,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="38" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="txtCrotal" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="spinnerCrotal" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -89,7 +93,9 @@
                   <Component id="txtNacimiento" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="spinnerNacimiento" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="btnAñadir" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -128,7 +134,7 @@
     <Component class="javax.swing.JSpinner" name="spinnerCrotal">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="7000" maximum="9000" minimum="7000" numberType="java.lang.Integer" stepSize="1199" type="number"/>
+          <SpinnerModel initial="7000" maximum="9000" minimum="7000" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
       </Properties>
     </Component>
@@ -190,6 +196,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="A&#xf1;adir Vaca"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnA&#xf1;adir">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnA&#xf1;adirActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
