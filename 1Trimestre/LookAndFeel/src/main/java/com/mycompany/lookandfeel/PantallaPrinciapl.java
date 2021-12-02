@@ -24,6 +24,7 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
      */
     public PantallaPrinciapl() {
         initComponents();
+        
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
         
         for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())
@@ -119,7 +120,7 @@ public class PantallaPrinciapl extends javax.swing.JFrame {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    javax.swing.UIManager.setLookAndFeel("Metal");
                     break;
                 }
             }
