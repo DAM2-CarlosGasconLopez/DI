@@ -13,7 +13,7 @@ import java.sql.DriverManager;
  * @author damA
  */
 public class Conectar {
-        public static final String URL = "jdbc:mysql://servidorifc.iesch.org:3306/aficiones";
+    public static final String URL = "jdbc:mysql://servidorifc.iesch.org:3306/aficiones";
     public static final String USER = "pasAlumno";
     public static final String PASS = "Admin1234";
  

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="acb27b89-1401-4dca-b9e4-7ba49dec707a">
+	<property name="ireport.zoom" value="1.7715610000000022"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="130"/>
+	<parameter name="pedido" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Users\\damA\\Documents\\DI\\DI\\1Trimestre\\Practica_5.1-Informes\\src\\main\\java\\Informes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select d.codigo_pedido, p.nombre,d.cantidad,d.precio_unidad,p.gama
+from detalle_pedido d inner join producto p on d.codigo_producto = p.codigo_producto
+where d.codigo_pedido = $P{pedido};]]>
+	</queryString>
+	<field name="codigo_pedido" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precio_unidad" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gama" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="SUM_SUBTOTAL" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{precio_unidad} * $F{cantidad}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="0" width="215" height="60" uuid="9e2b1f3e-1838-4336-a23f-b18a97791d67"/>
+				<textElement>
+					<font size="36" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FACTURA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="72" width="229" height="17" uuid="8fca7342-4e6c-4a2b-84e7-bdaad931ffe0"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Materiales Ganaderos Carlos Gascón"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="89" width="118" height="15" uuid="2c38177e-63ba-4a46-a753-02cdacd4fb02"/>
+				<textFieldExpression><![CDATA["Calle Extramuros 4"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="104" width="155" height="14" uuid="e1177c47-1c76-4ddd-aa7d-b7b24395f07d"/>
+				<textFieldExpression><![CDATA["44140 Cantavieja, Teruel"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="389" y="0" width="166" height="128" uuid="edf76c3a-f86f-48fa-9cab-1087afa3eb52"/>
+				<imageExpression><![CDATA["D:\\Users\\damA\\Desktop\\dairy-farm-cow-logo-design-template-3d4014bf8fb4ffd56fb236a9aaf63530_screen.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="38" splitType="Stretch">
+			<elementGroup/>
+			<subreport>
+				<reportElement x="-9" y="1" width="328" height="36" uuid="84de7943-a934-432a-b510-28990ff04d12"/>
+				<subreportParameter name="pedido">
+					<subreportParameterExpression><![CDATA[$F{codigo_pedido}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cliente.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="0" y="0" width="514" height="1" uuid="662e29d6-1040-4eef-b6ef-881d47d4df74"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="18" width="73" height="20" uuid="ad2c3c04-34dd-4eb0-b5c5-de0b01557407"/>
+				<textFieldExpression><![CDATA["CANTIDAD"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="18" width="100" height="20" uuid="7394d3a6-8922-4aae-8d9e-68d60edf2ff0"/>
+				<textFieldExpression><![CDATA["DESCRIPCIÓN"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="319" y="18" width="99" height="20" uuid="e64bbb26-3cd6-45cc-9e90-ce7c942be73b"/>
+				<textFieldExpression><![CDATA["PRECIO UNITARIO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="461" y="18" width="57" height="20" uuid="b2cf9c47-cf1f-469a-9a46-575a762e06a4"/>
+				<textFieldExpression><![CDATA["IMPORTE"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="38" width="514" height="1" uuid="60292aee-4ae9-4d52-9cbf-99734c264bb9"/>
+			</line>
+			<line>
+				<reportElement x="4" y="5" width="514" height="1" uuid="3ed1ab45-603b-471b-96ec-c4a479bcf09f"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement x="83" y="14" width="225" height="20" uuid="38cce15c-ccc8-4469-ab49-a61e4574e8ad"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="14" width="58" height="20" uuid="5e4d62d9-024e-462e-95e8-cabc3ccf1957"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="319" y="14" width="99" height="20" uuid="f6b0df54-f8a1-4c93-a3ba-cbeb227c69be"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{precio_unidad} + " €"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="14" width="83" height="20" uuid="02fd94f3-80ee-462e-93a7-28f5d04411c6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{precio_unidad} * $F{cantidad} + " €"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="121">
+			<textField>
+				<reportElement x="314" y="57" width="31" height="20" uuid="9542bb0e-2ce3-43f2-bfb2-3dd632f131a1"/>
+				<textFieldExpression><![CDATA["Fdo: "]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="354" y="19" width="188" height="51" uuid="179623ac-77b0-48e0-a11a-4d439e22c78b"/>
+			</rectangle>
+			<textField>
+				<reportElement x="1" y="91" width="554" height="29" forecolor="#666666" uuid="724f6fc2-4b99-4daf-ad7d-593645e04816"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Los pagos iran cargados a nombre de la compañia. El pago se realizara en el acto, es decir, no existe contrarrembolso. Las cantidades vencidas tendran un cargo de servicio de un 1% por mes"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="115" splitType="Stretch">
+			<textField>
+				<reportElement x="331" y="20" width="74" height="17" backcolor="#999999" uuid="4656f6f8-ae7f-4bd8-95bd-e62f17d6b87d"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Subtotal"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="17" width="100" height="20" uuid="11158911-df53-4f57-9d8c-0e2a3646f95c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL}+" €"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="79" width="74" height="17" backcolor="#0099FF" uuid="4ffb333c-09f7-4a46-8ef8-edeffbce26e3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="49" width="74" height="17" forecolor="#000000" backcolor="#999999" uuid="d8547ab4-f114-41b3-b8d5-1088c5e0e56a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IVA (21%)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="49" width="100" height="20" uuid="829cd07f-d922-4653-82f9-2088930f6ee5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL} * 0.21 + " €"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="76" width="100" height="20" uuid="46b039bd-8f6b-45cb-a820-065abec6506f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL} + $V{SUM_SUBTOTAL} * 0.21 + " €"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="0" width="514" height="1" uuid="3596fdfa-51e4-4daa-9081-c80c1641898a"/>
+			</line>
+			<line>
+				<reportElement x="331" y="75" width="187" height="1" uuid="0e875fd1-e695-484b-8686-2c8e30896cf3"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

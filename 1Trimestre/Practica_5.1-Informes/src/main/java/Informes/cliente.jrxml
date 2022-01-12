@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56e3242e-a17b-41f4-9ff3-25c9f75c8399">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="pedido" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select d.codigo_pedido, d.fecha_pedido, d.fecha_esperada, d.fecha_entrega, c.nombre_cliente, c.telefono,c.linea_direccion1,c.linea_direccion2, c.ciudad, c.pais,c.codigo_postal, c.apellido_contacto
+from pedido d
+inner join cliente c on d.codigo_cliente = c.codigo_cliente
+where d.codigo_pedido = $P{pedido};]]>
+	</queryString>
+	<field name="codigo_pedido" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_pedido" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_esperada" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_entrega" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="linea_direccion1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="linea_direccion2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ciudad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pais" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigo_postal" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellido_contacto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="108" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="114" height="17" uuid="44f82add-d841-4734-ab0c-ebef69d9a41f"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="41" width="100" height="15" uuid="e46380ed-f86b-4bef-a678-8316941af755"/>
+				<textFieldExpression><![CDATA[$F{apellido_contacto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="72" width="100" height="14" uuid="fa2dd151-01ea-4846-84ee-f32e2f2c0680"/>
+				<textFieldExpression><![CDATA[$F{linea_direccion1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="90" width="245" height="13" uuid="4de8d322-07fe-4fe7-9bd8-9dd446e468bf"/>
+				<textFieldExpression><![CDATA[$F{codigo_postal} + " " + $F{ciudad} +"("+$F{pais}+")"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="21" width="100" height="15" uuid="b0aa59d1-3603-49c7-951c-0cf6ced6cdbd"/>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="4" width="114" height="17" uuid="4cbaddd0-11df-4882-9fc0-1228145f9b94"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº DE FACTURA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="43" width="136" height="17" uuid="cccaf074-8bd2-4d44-953e-699659373316"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA DE ENTREGA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="24" width="136" height="17" uuid="c7f7569a-9ffe-4d68-8606-1eca9e3ffb35"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA DE PEDIDO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="63" width="163" height="17" uuid="df38396c-768d-429e-a4d5-1d405970906f"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA DE VENCIMIENTO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="4" width="95" height="16" uuid="3da32f3b-49dd-4d43-a2db-344a1d021615"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{codigo_pedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="412" y="25" width="95" height="16" uuid="82f57a9f-9204-4076-aec0-383575cca56c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{fecha_pedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="412" y="44" width="95" height="16" uuid="7f4f6104-391f-4c73-bc52-870fd8a96392"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{fecha_entrega}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="412" y="64" width="95" height="16" uuid="21463958-966b-4f3d-9453-c055611cf4bb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{fecha_pedido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
