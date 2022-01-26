@@ -5,15 +5,27 @@
  */
 package Informes;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -74,6 +86,11 @@ public class All_Pedidos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setViewportView(lstPedidos);
 
@@ -95,13 +112,66 @@ public class All_Pedidos extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
             .addGroup(layout.createSequentialGroup()
-                .addGap(175, 175, 175)
+                .addGap(156, 156, 156)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            Connection conect = DriverManager.getConnection("jdbc:mysql://servidorifc.iesch.org:3306/jardineria_di","pasAlumno","Admin1234");
+            
+            String[] string = lstPedidos.getSelectedValue().split(" ");
+            
+            
+            
+            Map parametros = new HashMap();
+            System.out.println(string[0]);
+            parametros.put("pedido", string[0]);
+            
+            JFileChooser chooser = new JFileChooser();
+            
+            //Para que solo dejer cojer archivos pdf
+            chooser.setAcceptAllFileFilterUsed(false);
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.pdf", "pdf");
+            
+            
+            chooser.setFileFilter(filtro);
+            chooser.setSelectedFile(new File("factura_"+string[0]));
+      
+            int seleccion = chooser.showOpenDialog(this);
+            
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                
+                JasperPrint print = JasperFillManager.fillReport(".\\src\\main\\java\\informes\\report1.jasper", parametros, conect);    
+                JasperExportManager.exportReportToPdfFile(print, chooser.getSelectedFile().getAbsolutePath() + ".pdf");
+                
+                
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "No se ha guardado la factura");
+            }
+            
+            
+            
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(All_Pedidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(All_Pedidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(All_Pedidos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

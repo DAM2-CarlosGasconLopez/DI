@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="acb27b89-1401-4dca-b9e4-7ba49dec707a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="acb27b89-1401-4dca-b9e4-7ba49dec707a">
 	<property name="ireport.zoom" value="1.7715610000000022"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="130"/>
@@ -29,8 +29,11 @@ where d.codigo_pedido = $P{pedido};]]>
 	<field name="gama" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="SUM_SUBTOTAL" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{precio_unidad} * $F{cantidad}]]></variableExpression>
+	<variable name="SUM_SUBTOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{precio_unidad}.multiply(BigDecimal.valueOf($F{cantidad}))]]></variableExpression>
+	</variable>
+	<variable name="IVA_SUBTOTAL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SUM_SUBTOTAL}.multiply(BigDecimal.valueOf(0.21))]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -125,7 +128,7 @@ where d.codigo_pedido = $P{pedido};]]>
 			<textField>
 				<reportElement x="435" y="14" width="83" height="20" uuid="02fd94f3-80ee-462e-93a7-28f5d04411c6"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{precio_unidad} * $F{cantidad} + " €"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{precio_unidad}.multiply(BigDecimal.valueOf($F{cantidad})) + " €"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -159,7 +162,7 @@ where d.codigo_pedido = $P{pedido};]]>
 			<textField>
 				<reportElement x="418" y="17" width="100" height="20" uuid="11158911-df53-4f57-9d8c-0e2a3646f95c"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL}+" €"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL} + " €"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="331" y="79" width="74" height="17" backcolor="#0099FF" uuid="4ffb333c-09f7-4a46-8ef8-edeffbce26e3"/>
@@ -178,12 +181,12 @@ where d.codigo_pedido = $P{pedido};]]>
 			<textField>
 				<reportElement x="418" y="49" width="100" height="20" uuid="829cd07f-d922-4653-82f9-2088930f6ee5"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL} * 0.21 + " €"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{IVA_SUBTOTAL} + " €"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="418" y="76" width="100" height="20" uuid="46b039bd-8f6b-45cb-a820-065abec6506f"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL} + $V{SUM_SUBTOTAL} * 0.21 + " €"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_SUBTOTAL}.add($V{IVA_SUBTOTAL})+ " €"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="0" width="514" height="1" uuid="3596fdfa-51e4-4daa-9081-c80c1641898a"/>
