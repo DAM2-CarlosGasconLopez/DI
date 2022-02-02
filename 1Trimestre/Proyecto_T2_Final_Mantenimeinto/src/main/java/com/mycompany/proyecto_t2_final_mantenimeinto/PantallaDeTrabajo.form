@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="menuIncidencias">
           <Properties>
             <Property name="text" type="java.lang.String" value="Incidencias"/>
           </Properties>
@@ -21,9 +21,19 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="menuProfesorado">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="text" type="java.lang.String" value="Profesorado"/>
+          </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="menuTecnico">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="T&#xe9;cnico"/>
+          </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="menuAdministrador">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Administrador"/>
           </Properties>
         </Menu>
       </SubComponents>

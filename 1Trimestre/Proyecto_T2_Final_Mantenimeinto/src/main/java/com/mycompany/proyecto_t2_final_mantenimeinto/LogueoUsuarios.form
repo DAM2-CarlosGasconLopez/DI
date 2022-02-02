@@ -114,6 +114,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="cgasconl"/>
             <Property name="toolTipText" type="java.lang.String" value="Ej: cgasconl"/>
           </Properties>
         </Component>
@@ -138,6 +139,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Admin1234"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnEntrar">

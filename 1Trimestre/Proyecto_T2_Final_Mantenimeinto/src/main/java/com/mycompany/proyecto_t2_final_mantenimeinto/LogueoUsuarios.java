@@ -58,6 +58,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtUsuario.setText("cgasconl");
         txtUsuario.setToolTipText("Ej: cgasconl");
 
         labelUser.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -67,6 +68,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         labelPasswd.setText("Contraseña");
 
         txtPaswwd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtPaswwd.setText("Admin1234");
 
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -157,13 +159,15 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         String user = null;
         String pas = null;
         int actividad = 0;
+        int rol = 0;
+        int idProfesor = 0;
 
         if (conexion != null) {
             
             try {
                 // Statements
                 Statement s = conexion.createStatement();          
-                ResultSet rs = s.executeQuery("select login, password, activo FROM fp_profesor where login ='"+txtUsuario.getText()+"'");
+                ResultSet rs = s.executeQuery("select login, password,activo,id_rol,id_profesor FROM fp_profesor where login ='"+txtUsuario.getText()+"'");
                 
                 
                 // Si usuario o contraseña estan vacios
@@ -181,6 +185,8 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                         user = rs.getString(1);
                         pas = rs.getString(2); 
                         actividad = rs.getInt(3);
+                        rol = rs.getInt(4);
+                        idProfesor = rs.getInt(5);
                         
                         // Si esta activo seguimos, sino nó
                         if (actividad == 0) {
@@ -190,9 +196,12 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                             // Si el usuario y contraseña son iguales, entramos a la pantalla
                             if (txtUsuario.getText().equals(user) && passwd.equals(pas)) {    
                                 
+                                // Mostramos la conexion exitosa y cerramos
                                 JOptionPane.showMessageDialog(this, "Exito");
-                                dispose();
-                                PantallaDeTrabajo trabajo = new PantallaDeTrabajo(null, true);
+                                dispose();     
+                                
+                                // Abrimos la pantalla de trabajo pasandole el rol
+                                PantallaDeTrabajo trabajo = new PantallaDeTrabajo(null, true, rol, idProfesor);
                                 trabajo.setVisible(true);
                                 
 
@@ -207,6 +216,11 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
+   
+  
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -254,4 +268,10 @@ public class LogueoUsuarios extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPaswwd;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+    
+
+    
+    
+
 }
