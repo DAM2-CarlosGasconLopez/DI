@@ -5,7 +5,7 @@
  */
 package com.mycompany.proyecto_t2_final_mantenimeinto;
 
-import com.mycompany.proyecto_t2_final_mantenimeinto.Clases.Profesor;
+import CosasEnRoot.MostrarProfesores;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +24,6 @@ import javax.swing.table.DefaultTableModel;
 public class PantallaDeTrabajo extends javax.swing.JDialog {
     
     Conectar conectar = null;
-    List<Profesor> listaPelis = new ArrayList<Profesor>();
     int idProfesorGuardar;
     
 
@@ -35,10 +34,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
        
         super(parent, modal);
         initComponents();
-        System.out.println("dvsfdv)");
         RefrescarIncidencias();
         idProfesorGuardar = idProfesor;
-        System.out.println("fdsd");
         // Aqui comrpobaremos el rol que tinen el usuario
         comprobarRol(rol);
         
@@ -51,13 +48,11 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         DefaultTableModel dtm = new DefaultTableModel();
         // Modelo de la tabla
         dtm.setColumnIdentifiers(new String[]{"Id Incidencia","Creada por","Descripcion","Descripción Técnica","Horas","Estado","Lanzamiento Incidencia",
-                                              "Inicio Reparacion","Fin Reparación","Nivel","Clase"}); //,"Edificio","Observaciones"});
+                                              "Inicio Reparacion","Fin Reparación","Nivel","Clase","Edificio","Observaciones"});
         
         
         
-        //for (Clientes cliente: listaclientes){
-        //    dtm.addRow(cliente.toArrayString());
-        //}
+ 
         
        
         // Conexión
@@ -69,21 +64,19 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
             
             Statement s = conexion.createStatement();
             // Le pasamos la consulta
-            ResultSet rs = s.executeQuery("SELECT * FROM man_incidencias;");
-            /*ResultSet rs = s.executeQuery("select i.id_incidencia, p.nombre_completo, i.descripcion, i.desc_tecnica,\n" +
+            ResultSet rs = s.executeQuery("select i.id_incidencia, p.nombre_completo, i.descripcion, i.desc_tecnica,\n" +
                                           " i.horas, est.estado, i.fecha,i.fecha_ini_rep, i.fecha_fin_rep, urg.urgencia, \n" +
                                           " ubi.ubicacion, edi.edificio, i.observaciones\n" +
                                           "from man_incidencias i\n" +
-                                          "inner join man_reparacion r on r.id_incidencia = i.id_incidencia\n" +
-                                          "inner join fp_profesor p on p.id_profesor = r.id_profesor\n" +
+                                          "inner join fp_profesor p on p.id_profesor = i.id_profesor_crea\n" +
                                           "inner join man_estado est on est.id_estado = i.id_estado\n" +
                                           "inner join man_urgencia urg on urg.id_urgencia = i.nivel_urgencia\n" +
                                           "inner join man_ubicacion ubi on ubi.id_ubicacion = i.id_ubicacion\n" +
-                                          "inner join man_edificio edi on edi.id_edificio = ubi.id_edificio ");*/
+                                          "inner join man_edificio edi on edi.id_edificio = ubi.id_edificio ");
                    
             // Generamos un array para recoger lo que pedimos en la consulta
-            //String incide[] = new String[13];
-            String incide[] = new String[11];
+            String incide[] = new String[13];
+            //String incide[] = new String[11];
                        
            
             while (rs.next()) {
@@ -98,8 +91,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                 incide[8] = rs.getString(9);
                 incide[9] = rs.getString(10);
                 incide[10] = rs.getString(11);
-                //incide[11] = rs.getString(12);
-                //incide[12] = rs.getString(13);
+                incide[11] = rs.getString(12);
+                incide[12] = rs.getString(13);
                 
               
                 // Añadimos una fila a la tabla
@@ -169,6 +162,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         menuProfesorado = new javax.swing.JMenu();
         menuTecnico = new javax.swing.JMenu();
         menuAdministrador = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -209,6 +204,18 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         jMenuBar1.add(menuTecnico);
 
         menuAdministrador.setText("Administrador");
+
+        jMenuItem3.setText("Profesores");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        menuAdministrador.add(jMenuItem3);
+
+        jMenuItem4.setText("Configuracion");
+        menuAdministrador.add(jMenuItem4);
+
         jMenuBar1.add(menuAdministrador);
 
         setJMenuBar(jMenuBar1);
@@ -241,10 +248,21 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         try {
             NuevaIncidencia newIncidencia = new NuevaIncidencia(null, true, idProfesorGuardar);
             newIncidencia.setVisible(true);
+            RefrescarIncidencias();
         } catch (SQLException ex) {
             Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCrearIncidenciaActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        try {
+            MostrarProfesores nuevoProfesor = new MostrarProfesores(null, true);
+            nuevoProfesor.setVisible(true);
+            RefrescarIncidencias();
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
    
 
@@ -253,6 +271,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu menuAdministrador;
     private javax.swing.JMenu menuIncidencias;

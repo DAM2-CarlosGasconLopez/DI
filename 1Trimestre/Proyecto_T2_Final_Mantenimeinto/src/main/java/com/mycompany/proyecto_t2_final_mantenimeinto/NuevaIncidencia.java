@@ -21,7 +21,8 @@ import javax.swing.JOptionPane;
  * @author damA
  */
 public class NuevaIncidencia extends javax.swing.JDialog {
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    DateTimeFormatter dtfShort = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
+    DateTimeFormatter dtfLarge = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     String[] array;
     Conectar conectar = null;
     int idProfesorActual;
@@ -72,15 +73,9 @@ public class NuevaIncidencia extends javax.swing.JDialog {
             
             // Fecha actual
             
-            txtDatetime.setText(dtf.format(LocalDateTime.now()));
+            txtFecha.setText(dtfLarge.format(LocalDateTime.now()));
             
-            
-            
-            
-            
-            
-            
-                                    
+           
         }
         else{
             JOptionPane.showMessageDialog(this, "conexion fallida");
@@ -107,9 +102,9 @@ public class NuevaIncidencia extends javax.swing.JDialog {
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        txtDatetime = new javax.swing.JTextField();
         txtObservaciones = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        txtFecha = new javax.swing.JTextField();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -154,56 +149,50 @@ public class NuevaIncidencia extends javax.swing.JDialog {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Fecha");
 
-        txtDatetime.setEditable(false);
-        txtDatetime.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
         txtObservaciones.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setText("Observaciones");
 
+        txtFecha.setEditable(false);
+        txtFecha.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(100, 100, 100)
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(31, 31, 31)
                                 .addComponent(txtObservaciones))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5)
                                             .addComponent(jLabel6)
-                                            .addComponent(jLabel7))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(56, 56, 56)
-                                                .addComponent(txtDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboUbicacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAceptar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel3))
+                                        .addGap(56, 56, 56)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cboUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -226,7 +215,7 @@ public class NuevaIncidencia extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtDatetime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -254,8 +243,8 @@ public class NuevaIncidencia extends javax.swing.JDialog {
             
            try {
                // Le pasamos la consulta              
-               String sql ="insert into man_incidencias (id_profesor_crea,descripcion,id_estado,fecha,id_ubicacion,observaciones) \n" +
-                           "values (?,?,?,?,?,?);";
+               String sql ="insert into man_incidencias (id_profesor_crea,descripcion,id_estado,fecha,id_ubicacion,observaciones,nivel_urgencia) \n" +
+                           "values (?,?,?,?,?,?,"+4+");";
                
             PreparedStatement ps = null;
             ps = conexion.prepareStatement(sql);
@@ -263,7 +252,7 @@ public class NuevaIncidencia extends javax.swing.JDialog {
             ps.setInt(1, idProfesorActual);
             ps.setString(2, txtDescripcion.getText());
             ps.setInt(3, 1);
-            ps.setString(4, dtf.format(LocalDateTime.now()));
+            ps.setString(4, dtfLarge.format(LocalDateTime.now()));
             ps.setInt(5, Integer.parseInt(array[0]));
             ps.setString(6, txtObservaciones.getText());
             
@@ -297,8 +286,8 @@ public class NuevaIncidencia extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField txtDatetime;
     private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtIdProfesor1;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtObservaciones;

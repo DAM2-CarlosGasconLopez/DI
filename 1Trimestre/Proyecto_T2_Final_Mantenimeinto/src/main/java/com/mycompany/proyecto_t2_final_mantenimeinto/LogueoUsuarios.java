@@ -5,7 +5,6 @@
  */
 package com.mycompany.proyecto_t2_final_mantenimeinto;
 
-import com.mycompany.proyecto_t2_final_mantenimeinto.Clases.Profesor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
