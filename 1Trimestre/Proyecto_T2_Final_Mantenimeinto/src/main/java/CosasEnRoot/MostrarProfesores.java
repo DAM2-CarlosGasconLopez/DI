@@ -145,7 +145,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 PreparedStatement s = null;
                 conectar = new Conectar();
                 Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set password = 'ESCH2022' where id_profesor = " + id + ";";                
+                var sql = "update fp_profesor set password = 'IESCH2022' where id_profesor = " + id + ";";                
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
                 
