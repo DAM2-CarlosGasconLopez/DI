@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -353,13 +354,17 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
-                    PanelModifyIncidencia();
+                    try {
+                        PanelModifyIncidencia();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
-            private void PanelModifyIncidencia() throws SQLException {
+            private void PanelModifyIncidencia() throws SQLException, ParseException {
                 
                int cuentaFilasSeleccionadas = tablaIncidencias.getSelectedRowCount();
 

@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
  * @author carlo
  */
 public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
+    
+    Date dateini;
 
     DateTimeFormatter dtfShort = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
     DateTimeFormatter dtfLarge = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -116,20 +120,25 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
             
             txtFecha.setText(incide[6]);
             
-            /*if(incide[7] != null){
+            
+            if(incide[7] != null){
                 
-                String[] date = incide[7].split(" ");
-                
-                
-                Date fecha  = (Date) sdtDate.parse(date[0]);
-                
-                
+                String[] elminar = incide[7].split(" ");
+                 String[] fecha=elminar[0].split("-");
+                int year= Integer.parseInt(fecha[0]);
+                int mes= Integer.parseInt(fecha[1]);
+                int dia= Integer.parseInt(fecha[2]);
+ 
+               
+                Calendar calendario = new GregorianCalendar(year,mes,dia);
+                calendarIni.setDate(calendario.getTime());
+                              
 
-                System.out.println(sdtDate.format(fecha));
+                //System.out.println(sdtDate.format(fecha));
                 
             }else{
                 
-            }*/
+            }
             
             // Consulta de urgencia
             rs = s.executeQuery("SELECT id_urgencia, urgencia FROM man_urgencia;");
@@ -227,7 +236,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         cboUrgencia = new javax.swing.JComboBox<>();
         cboUbicacion = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
-        calendarFin = new com.toedter.calendar.JDateChooser();
+        calendarIni = new com.toedter.calendar.JDateChooser();
         calendarFin1 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -310,7 +319,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel15.setText("Observaciones");
 
-        calendarFin.setDateFormatString("yyyy MM dd");
+        calendarIni.setDateFormatString("yyyy MM dd");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -368,7 +377,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                                     .addComponent(cboUrgencia, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cboUbicacion, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(calendarFin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(calendarIni, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(calendarFin1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(13, 13, 13)))
                 .addGap(47, 47, 47))
@@ -387,7 +396,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
-                        .addComponent(calendarFin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(calendarIni, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -484,8 +493,8 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private com.toedter.calendar.JDateChooser calendarFin;
     private com.toedter.calendar.JDateChooser calendarFin1;
+    private com.toedter.calendar.JDateChooser calendarIni;
     private javax.swing.JComboBox<String> cboEstado;
     private javax.swing.JComboBox<String> cboUbicacion;
     private javax.swing.JComboBox<String> cboUrgencia;

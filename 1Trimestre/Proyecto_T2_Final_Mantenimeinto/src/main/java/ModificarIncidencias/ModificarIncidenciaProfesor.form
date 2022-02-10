@@ -88,7 +88,7 @@
                                   <Component id="jScrollPane2" alignment="0" pref="253" max="32767" attributes="0"/>
                                   <Component id="cboUrgencia" alignment="0" max="32767" attributes="0"/>
                                   <Component id="cboUbicacion" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="calendarFin" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="calendarIni" alignment="0" max="32767" attributes="0"/>
                                   <Component id="calendarFin1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -115,7 +115,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="txtFecha" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="calendarFin" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="calendarIni" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -418,7 +418,7 @@
         <Property name="text" type="java.lang.String" value="Observaciones"/>
       </Properties>
     </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="calendarFin">
+    <Component class="com.toedter.calendar.JDateChooser" name="calendarIni">
       <Properties>
         <Property name="dateFormatString" type="java.lang.String" value="yyyy MM dd"/>
       </Properties>
