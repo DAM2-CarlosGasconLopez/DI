@@ -478,10 +478,18 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         String[] estadoArray = cboEstado.getSelectedItem().toString().split(" ");
         estado = Integer.parseInt(estadoArray[0]);
         
- 
+        
         fecha_ini_rep = sdtDate.format(calendarIni.getDate());
+        System.out.println(fecha_ini_rep);
+        if(fecha_ini_rep == null){
+            fecha_ini_rep = "";
+        }
         
         fecha_fin_rep = sdtDate.format(calendarFin1.getDate());
+        System.out.println(fecha_fin_rep);
+        if(fecha_fin_rep == null){
+            fecha_fin_rep = "";
+        }
       
         
         
