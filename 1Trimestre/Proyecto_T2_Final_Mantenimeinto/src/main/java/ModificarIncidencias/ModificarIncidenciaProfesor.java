@@ -116,13 +116,20 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
             txtIdIncidencia.setText(incide[0]);
             txtNombre.setText(incide[1]);
             txtDescripcion.setText(incide[2]);
-            txtDescripcionTecnica.setText(incide[3]);
-            if (incide[4] == null) {
-               spinnerHoras.setValue(0); 
+            txtDescripcionTecnica.setText(incide[3]);  
+            
+            // Para el campo fecha lo combierto de string a double y de double a int
+            // Si es null, le pongo valor 0
+            if (incide[4] !=null) {
+                double valor = Double.parseDouble(incide[4]);
+                spinnerHoras.setValue((int)valor);
+                
             }else{
-                spinnerHoras.setValue(incide[4]);
+                spinnerHoras.setValue(0);
             }
             
+            
+            // Consulta para recoger los ESTADOS
             rs = s.executeQuery("SELECT id_estado,estado from man_estado; ");
             String[] estado = new String[2];
             
@@ -139,6 +146,8 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                 
             }
             
+            
+            // FECHA
             txtFecha.setText(incide[6]);
             
             // Fecha Inicio

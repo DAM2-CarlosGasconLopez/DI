@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -30,12 +32,51 @@ public class MostrarProfesores extends javax.swing.JDialog {
     public MostrarProfesores(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
         initComponents();
+        FiltrarCBORefrecar();
         RefrescarProfesores();
         crearpopupmenu();
     }
 
     
-    
+    // Filtrar
+    public void FiltrarCBORefrecar() throws SQLException{
+        // Conexión
+        conectar = new Conectar();
+        Connection conexion = conectar.getConnection();
+        
+        if (conexion != null) {
+            
+            Statement s = conexion.createStatement();
+            // Le pasamos la consulta del departamento
+            ResultSet rs = s.executeQuery("SELECT * FROM fp_departamento;");
+            
+            String[] array = new String[2];
+            // Rellenamos el cbo de departamento
+            while (rs.next()) {
+               array[0] = rs.getString(1);
+               array[1] = rs.getString(2);
+               cboDepartamento.addItem(array[0] + "  " + array[1]);
+            }
+            
+            // Consulta de Rol 
+            rs = s.executeQuery("SELECT * FROM fp_rol;");
+            
+            array = new String[2];
+            // Recorremos el Rs
+            while (rs.next()) {                
+                array[0] = rs.getString(1);
+                array[1] = rs.getString(2);
+                
+                cboRol.addItem(array[0] + "  " + array[1]);
+            }
+            
+            cboActivo.addItem("Activo");
+            cboActivo.addItem("No Activo");
+            
+            
+           
+        }
+    }
    
     
     
@@ -97,13 +138,23 @@ public class MostrarProfesores extends javax.swing.JDialog {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem contraseñaItem = new JMenuItem("Restablecer Contraseña (IESCH2022)");
         JMenuItem activoitem = new JMenuItem("Activo");
-        JMenuItem rolItem = new JMenuItem("Cambiar Rol");
+        
+        JMenu rolProfesor = new JMenu("Cambiar rol");
+        JMenuItem root = new JMenuItem("Poner como root");
+        JMenuItem tecnico = new JMenuItem("Poner como tecnico");
+        JMenuItem profesor = new JMenuItem("Poner como profesor");
 
        
                
         popupMenu.add(contraseñaItem);
         popupMenu.add(activoitem);
-        popupMenu.add(rolItem);
+        
+        popupMenu.add(rolProfesor);
+        
+        rolProfesor.add(root);
+        rolProfesor.add(tecnico);
+        rolProfesor.add(profesor);
+        
        
         tableProfesores.setComponentPopupMenu(popupMenu);
        
@@ -117,20 +168,241 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 }
             }
         });
-/*
-        rolItem.addActionListener(new ActionListener() {
+        
+        activoitem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
-                    buscarTematicaPOP();
+                    MostrarJOP();
                 } catch (SQLException ex) {
-                    Logger.getLogger(Peliculas.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });  */
+
+        });
+
+        root.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                    cambiarPorRoot();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            
+        });
+         
+        tecnico.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                    cambiarPorTecnico();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }); 
+        
+        profesor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                    cambiarPorProfe();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }); 
     }
     
-     public void ReestablecerContraseñaPOP() throws SQLException{
+    public void cambiarPorRoot() throws SQLException{
+        int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
+
+        if (cuentaFilasSeleccionadas == 0) {
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+        } else {
+            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Root?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado==JOptionPane.YES_OPTION) {
+                int fila = tableProfesores.getSelectedRow();
+                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
+               
+                // Conexiones
+                PreparedStatement s = null;
+                conectar = new Conectar();
+                Connection connection = conectar.getConnection();               
+                var sql = "update fp_profesor set id_rol = 1 where id_profesor =" + id + ";";                
+                s = connection.prepareStatement(sql);
+                s.executeUpdate(sql);
+                
+                RefrescarProfesores();
+                JOptionPane.showMessageDialog(this,"Operacion Correcta");
+                
+               
+               
+            }else if (resultado==JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Root","",JOptionPane.ERROR_MESSAGE);
+            }
+            else if (resultado==JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+         
+    }
+    public void cambiarPorTecnico() throws SQLException{
+        
+        int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
+
+        if (cuentaFilasSeleccionadas == 0) {
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+        } else {
+            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Tecnico?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado==JOptionPane.YES_OPTION) {
+                int fila = tableProfesores.getSelectedRow();
+                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
+               
+                // Conexiones
+                PreparedStatement s = null;
+                conectar = new Conectar();
+                Connection connection = conectar.getConnection();               
+                var sql = "update fp_profesor set id_rol = 2 where id_profesor =" + id + ";";                
+                s = connection.prepareStatement(sql);
+                s.executeUpdate(sql);
+                
+                RefrescarProfesores();
+                JOptionPane.showMessageDialog(this,"Operacion Correcta");
+                
+               
+               
+            }else if (resultado==JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Técnico","",JOptionPane.ERROR_MESSAGE);
+            }
+            else if (resultado==JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+         
+    }
+    public void cambiarPorProfe() throws SQLException{
+         
+        int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
+
+        if (cuentaFilasSeleccionadas == 0) {
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+        } else {
+            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Profesor?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado==JOptionPane.YES_OPTION) {
+                int fila = tableProfesores.getSelectedRow();
+                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
+               
+                // Conexiones
+                PreparedStatement s = null;
+                conectar = new Conectar();
+                Connection connection = conectar.getConnection();               
+                var sql = "update fp_profesor set id_rol = 3 where id_profesor =" + id + ";";                
+                s = connection.prepareStatement(sql);
+                s.executeUpdate(sql);
+                
+                RefrescarProfesores();
+                JOptionPane.showMessageDialog(this,"Operacion Correcta");
+                
+                
+                
+               
+               
+            }else if (resultado==JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Profesor","",JOptionPane.ERROR_MESSAGE);
+            }
+            else if (resultado==JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    public void MostrarJOP() throws SQLException{
+        
+        int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
+
+        if (cuentaFilasSeleccionadas == 0) {
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+        } else {
+                // Sacamos la fila
+                int fila = tableProfesores.getSelectedRow();
+                // Cogemos si es activo o no
+                var activo =tableProfesores.getModel().getValueAt(fila, 4).toString();
+                // Cogemos el id
+                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
+                
+                // Generamos un checkBox
+                JCheckBox check = new JCheckBox("Activo");
+                // Pasamos al check box lo recogido en la tabla
+                if (activo.equals("Si")) {
+                    check.setSelected(true);
+                }else{
+                    check.setSelected(false);
+                }
+                
+                var seleccionado = check.isSelected();
+                
+                // Generamos un mensage
+                String msg = "Cambiar actividad del profesor"; 
+
+                // Creamos el objeto con el checkbox + msg
+                Object[] msgContent = {msg,check }; 
+                
+                // JOptionPane para guardar el cambia recien realizado en el checkbox
+                int n = JOptionPane.showConfirmDialog(this,msgContent, "Altas y Bajas",JOptionPane.OK_CANCEL_OPTION);
+                
+                // Conexiones
+                PreparedStatement s = null;
+                conectar = new Conectar();
+                Connection connection = conectar.getConnection();     
+                // Si la respuesta del panel es acepatar, entonces...
+                if (n == 0) {
+                    // Si esta seleccionado el check,...
+                    if (check.isSelected() == true) {
+                        
+                        // si antes era false y ahora es true, confirmamos operacion
+                        if (seleccionado != true) {
+                            // Cambiamos a activo el profesor con el id seleccionado
+                            var sql = "update fp_profesor set activo = 1 where id_profesor =" + id + ";";                
+                            s = connection.prepareStatement(sql);
+                            s.executeUpdate(sql);
+
+                            RefrescarProfesores();
+                            JOptionPane.showMessageDialog(this,"Operacion Correcta");
+                            
+                        }
+                        
+                    // Si no,...
+                    }else{
+                         
+                        // Si antes era true y ahora es false, confirmamos operacion
+                        if (seleccionado != false) {
+                            // Cambiamos a desactivo el profesor con el id seleccionado
+                            var sql = "update fp_profesor set activo = 0 where id_profesor =" + id + ";";                
+                            s = connection.prepareStatement(sql);
+                            s.executeUpdate(sql);
+
+                            RefrescarProfesores();
+                            
+                            JOptionPane.showMessageDialog(this,"Operacion Correcta");            
+                        }
+                    }
+                   
+                
+                }
+               
+                
+                
+                
+            
+        }
+   
+    }
+    
+    public void ReestablecerContraseñaPOP() throws SQLException{
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
@@ -150,7 +422,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 s.executeUpdate(sql);
                 
                 RefrescarProfesores();
-                
+                JOptionPane.showMessageDialog(this,"Operacion Correcta");
                 
                
                
@@ -162,7 +434,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
         }
     }
-    
+    // Fin POPUT
     
     
     
@@ -177,7 +449,20 @@ public class MostrarProfesores extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableProfesores = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        cboActivo = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        cboRol = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        cboDepartamento = new javax.swing.JComboBox<>();
+        btnRol = new javax.swing.JButton();
+        btnActivo = new javax.swing.JButton();
+        btnDepa = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         btnAddProfesor = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -197,6 +482,31 @@ public class MostrarProfesores extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tableProfesores);
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Activo");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setText("Filtrar Por:");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Rol");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Departamento");
+
+        btnRol.setText("OK");
+
+        btnActivo.setText("OK");
+
+        btnDepa.setText("OK");
+
+        jButton1.setText("Eliminar Filtros");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         btnAddProfesor.setText("Añadir Nuevo Profesor");
         btnAddProfesor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,20 +514,94 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setText("------------------------");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAddProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cboRol, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRol, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cboDepartamento, javax.swing.GroupLayout.Alignment.LEADING, 0, 124, Short.MAX_VALUE)
+                            .addComponent(cboActivo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnDepa, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(btnActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(39, 39, 39))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRol, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboActivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnActivo))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDepa))
+                .addGap(36, 36, 36)
+                .addComponent(jButton1)
+                .addGap(35, 35, 35)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddProfesor, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(295, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(289, 289, 289))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 982, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAddProfesor)
-                        .addGap(29, 29, 29))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(289, 289, 289))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,10 +609,10 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddProfesor)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -244,11 +628,28 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAddProfesorActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActivo;
     private javax.swing.JButton btnAddProfesor;
+    private javax.swing.JButton btnDepa;
+    private javax.swing.JButton btnRol;
+    private javax.swing.JComboBox<String> cboActivo;
+    private javax.swing.JComboBox<String> cboDepartamento;
+    private javax.swing.JComboBox<String> cboRol;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -158,9 +159,16 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     // Hacemos un SELECT con todas las INCIDENCIAS para TECNICO y ROOT
     public void CargarTodasIncidencias() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
+        
         // Modelo de la tabla
         dtm.setColumnIdentifiers(new String[]{"Id Incidencia", "Creada por", "Descripcion", "Descripción Técnica", "Horas", "Estado", "Lanzamiento Incidencia",
             "Inicio Reparacion", "Fin Reparación", "Nivel", "Clase", "Edificio", "Observaciones"});
+        
+        //ELEMENTOS PARA ORDENAR LA TABLA INCIDENCIAS
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(dtm);
+        //Ordenamos la tabla segun las columnas
+        tablaIncidencias.setRowSorter(rowSorter);
+        
 
         // Conexión
         conectar = new Conectar();
@@ -181,6 +189,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                     + "inner join man_edificio edi on edi.id_edificio = ubi.id_edificio ");
 
             // Generamos un array para recoger lo que pedimos en la consulta
+         
             String incide[] = new String[13];
             //String incide[] = new String[11];
 
@@ -207,7 +216,19 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         } else {
             JOptionPane.showMessageDialog(this, "conexion fallida");
         }
-    }
+        
+        /*dtm = new DefaultTableModel(){
+            @Override
+            public Class getColumnClass(int columna){
+            if (columna == 1) {
+                return Integer.class;
+            }
+                return String.class ;
+        };
+       
+    };*/
+        
+  }
 
     
     
