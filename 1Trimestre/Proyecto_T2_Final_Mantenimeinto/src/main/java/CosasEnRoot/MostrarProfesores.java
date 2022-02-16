@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MostrarProfesores extends javax.swing.JDialog {
     Conectar conectar = null;
+    
    
     public MostrarProfesores(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
@@ -135,6 +136,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
     
     // POPUP MENU
     private void crearpopupmenu() {
+        // Generamos el Poput
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem contraseñaItem = new JMenuItem("Restablecer Contraseña (IESCH2022)");
         JMenuItem activoitem = new JMenuItem("Activo");
@@ -144,7 +146,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         JMenuItem tecnico = new JMenuItem("Poner como tecnico");
         JMenuItem profesor = new JMenuItem("Poner como profesor");
 
-       
+       // Añadir Campos al PoputMenu
                
         popupMenu.add(contraseñaItem);
         popupMenu.add(activoitem);
@@ -158,6 +160,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
        
         tableProfesores.setComponentPopupMenu(popupMenu);
        
+        // Le damos accion a los items del PoputMenu
         contraseñaItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -217,6 +220,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }); 
     }
     
+    // cambiar rol a root
     public void cambiarPorRoot() throws SQLException{
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
@@ -250,6 +254,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
          
     }
+    // cambiar rol a tecnico
     public void cambiarPorTecnico() throws SQLException{
         
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
@@ -284,6 +289,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
          
     }
+    // cambiar rol a profesor
     public void cambiarPorProfe() throws SQLException{
          
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
@@ -320,6 +326,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
     }
     
+    // mostrar JOptionPane con CheckBox para Activo
     public void MostrarJOP() throws SQLException{
         
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
@@ -402,6 +409,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
    
     }
     
+    // cambiar contraseña profesor
     public void ReestablecerContraseñaPOP() throws SQLException{
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
@@ -460,7 +468,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         btnRol = new javax.swing.JButton();
         btnActivo = new javax.swing.JButton();
         btnDepa = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        brnSinFiltros = new javax.swing.JButton();
         btnAddProfesor = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
@@ -495,15 +503,30 @@ public class MostrarProfesores extends javax.swing.JDialog {
         jLabel6.setText("Departamento");
 
         btnRol.setText("OK");
+        btnRol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRolActionPerformed(evt);
+            }
+        });
 
         btnActivo.setText("OK");
+        btnActivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActivoActionPerformed(evt);
+            }
+        });
 
         btnDepa.setText("OK");
-
-        jButton1.setText("Eliminar Filtros");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnDepa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnDepaActionPerformed(evt);
+            }
+        });
+
+        brnSinFiltros.setText("Eliminar Filtros");
+        brnSinFiltros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                brnSinFiltrosActionPerformed(evt);
             }
         });
 
@@ -515,7 +538,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel7.setText("------------------------");
+        jLabel7.setText("-------------------------");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -526,20 +549,20 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAddProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(brnSinFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cboRol, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRol, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnAddProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(cboRol, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnRol, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(cboDepartamento, javax.swing.GroupLayout.Alignment.LEADING, 0, 124, Short.MAX_VALUE)
@@ -554,7 +577,10 @@ public class MostrarProfesores extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel4)
-                        .addGap(39, 39, 39))))
+                        .addGap(39, 39, 39))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -579,7 +605,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                     .addComponent(cboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDepa))
                 .addGap(36, 36, 36)
-                .addComponent(jButton1)
+                .addComponent(brnSinFiltros)
                 .addGap(35, 35, 35)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -628,13 +654,134 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAddProfesorActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    // Boton SIN FILTROS
+    private void brnSinFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnSinFiltrosActionPerformed
+        try {
+            RefrescarProfesores();
+        } catch (SQLException ex) {
+            Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_brnSinFiltrosActionPerformed
+    // Boton FILTRAR por ROL   
+    private void btnRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRolActionPerformed
+        
+    }//GEN-LAST:event_btnRolActionPerformed
+    // Boton FILTRAR por ACTIVO
+    private void btnActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivoActionPerformed
+        
+        DefaultTableModel dtm = new DefaultTableModel();
+        // Modelo de la tabla
+        dtm.setColumnIdentifiers(new String[]{"Id","Login","Nombre","E-Mail","Activo","Rol","Departamento"});
+        
+        // Conexión
+        conectar = new Conectar();
+        Connection conexion = conectar.getConnection();
+        
+        // Si el valor seleccionado0 en el cbo es Activo...
+        if (cboActivo.getSelectedItem().equals("Activo")) {
+            
+        
+            if (conexion != null) {
+
+
+                try {
+                    Statement s = conexion.createStatement();
+                    // Le pasamos la consulta
+                    ResultSet rs = s.executeQuery("SELECT p.id_profesor, p.login, p.nombre_completo, p.email, if(p.activo = 1,\"Si\",\"No\"),"
+                            + "r.rol,d.departamento_corto\n" +
+                            "FROM fp_profesor p\n" +
+                            "inner join fp_rol r on r.id_rol = p.id_rol\n" +
+                            "inner join fp_departamento d on d.id_departamento = p.id_departamento " +
+                            "where p.activo = 1;");
+                    
+                    // Generamos un array para recoger lo que pedimos en la consulta
+                    String incide[] = new String[7];
+                    //String incide[] = new String[11];
+                    
+                    
+                    while (rs.next()) {
+                        incide[0] = rs.getString(1);
+                        incide[1] = rs.getString(2);
+                        incide[2] = rs.getString(3);
+                        incide[3] = rs.getString(4);
+                        incide[4] = rs.getString(5);
+                        incide[5] = rs.getString(6);
+                        incide[6] = rs.getString(7);
+                        
+                        
+                        // Añadimos una fila a la tabla
+                        dtm.addRow(incide);
+                    }
+                    // Le ponemos modelo a la tabla
+                    tableProfesores.setModel(dtm);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            
+            }else{
+                JOptionPane.showMessageDialog(this, "conexion fallida");
+            }
+            
+        // Si es No Activo
+        }else{
+            if (conexion != null) {
+
+
+                try {
+                    Statement s = conexion.createStatement();
+                    // Le pasamos la consulta
+                    ResultSet rs = s.executeQuery("SELECT p.id_profesor, p.login, p.nombre_completo, p.email, if(p.activo = 1,\"Si\",\"No\"),"
+                            + "r.rol,d.departamento_corto\n" +
+                            "FROM fp_profesor p\n" +
+                            "inner join fp_rol r on r.id_rol = p.id_rol\n" +
+                            "inner join fp_departamento d on d.id_departamento = p.id_departamento " +
+                            "where p.activo = 0 ;");
+                    
+                    // Generamos un array para recoger lo que pedimos en la consulta
+                    String incide[] = new String[7];
+                    //String incide[] = new String[11];
+                    
+                    
+                    while (rs.next()) {
+                        incide[0] = rs.getString(1);
+                        incide[1] = rs.getString(2);
+                        incide[2] = rs.getString(3);
+                        incide[3] = rs.getString(4);
+                        incide[4] = rs.getString(5);
+                        incide[5] = rs.getString(6);
+                        incide[6] = rs.getString(7);
+                        
+                        
+                        // Añadimos una fila a la tabla
+                        dtm.addRow(incide);
+                    }
+                    // Le ponemos modelo a la tabla
+                    tableProfesores.setModel(dtm);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            
+            }else{
+                JOptionPane.showMessageDialog(this, "conexion fallida");
+            }
+            
+            
+        
+        }
+        
+    }//GEN-LAST:event_btnActivoActionPerformed
+
+    // Boton FILTRAR por DEPARTAMENTO
+    private void btnDepaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepaActionPerformed
+        
+    }//GEN-LAST:event_btnDepaActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton brnSinFiltros;
     private javax.swing.JButton btnActivo;
     private javax.swing.JButton btnAddProfesor;
     private javax.swing.JButton btnDepa;
@@ -642,7 +789,6 @@ public class MostrarProfesores extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cboActivo;
     private javax.swing.JComboBox<String> cboDepartamento;
     private javax.swing.JComboBox<String> cboRol;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
