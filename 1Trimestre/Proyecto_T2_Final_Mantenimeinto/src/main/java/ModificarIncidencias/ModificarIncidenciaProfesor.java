@@ -53,11 +53,16 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
     
     
     
-    public ModificarIncidenciaProfesor(java.awt.Frame parent, boolean modal, String idIncidencia) throws SQLException, ParseException {
+    public ModificarIncidenciaProfesor(java.awt.Frame parent, boolean modal, String idIncidencia, int rol) throws SQLException, ParseException {
         super(parent, modal);
         initComponents();
         this.idIncidencia = idIncidencia;
         RefrescarIncidencia(idIncidencia);
+        
+        // Si es Profesor 
+        if (rol == 3) {
+            restriccionesProfesor();
+        }
         
       
     }
@@ -256,9 +261,9 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtIdIncidencia = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        labelEstado = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        labelUrgencia = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         spinnerHoras = new javax.swing.JSpinner();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -324,14 +329,14 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         txtIdIncidencia.setEditable(false);
         txtIdIncidencia.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel11.setText("Estado Actual");
+        labelEstado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        labelEstado.setText("Estado Actual");
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel12.setText("Inicio Reparación");
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel13.setText("Nivel Urgencia");
+        labelUrgencia.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        labelUrgencia.setText("Nivel Urgencia");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setText("Fin de Reparacion");
@@ -367,7 +372,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel11)
+                            .addComponent(labelEstado)
                             .addComponent(jLabel8))))
                 .addGap(84, 84, 84)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +402,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
                                         .addGap(34, 34, 34))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
+                                        .addComponent(labelUrgencia)
                                         .addGap(30, 30, 30))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jLabel15)
@@ -444,7 +449,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cboUrgencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
+                            .addComponent(labelUrgencia))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cboUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -469,7 +474,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
                             .addComponent(spinnerHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
+                            .addComponent(labelEstado)
                             .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -488,20 +493,19 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         estado = Integer.parseInt(estadoArray[0]);
         
         
-        fecha_ini_rep = sdtDate.format(calendarIni.getDate());
-        System.out.println(fecha_ini_rep);
-        if(fecha_ini_rep == null){
-            fecha_ini_rep = "";
+        if (calendarIni.getDate() == null) {
+            fecha_ini_rep = null;
+        }else{
+            fecha_ini_rep = sdtDate.format(calendarIni.getDate());
         }
         
-        fecha_fin_rep = sdtDate.format(calendarFin1.getDate());
-        System.out.println(fecha_fin_rep);
-        if(fecha_fin_rep == null){
-            fecha_fin_rep = "";
+        if (calendarFin1.getDate() == null) {
+            fecha_fin_rep = null;
+        }else{
+            fecha_fin_rep = sdtDate.format(calendarFin1.getDate());
+        
         }
-      
-        
-        
+
         String[] nivelUrge = cboUrgencia.getSelectedItem().toString().split(" ");
         nivel = Integer.parseInt(nivelUrge[0]);
         String[] ubicacionArray = cboUbicacion.getSelectedItem().toString().split("  ");
@@ -568,6 +572,15 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    // Restricciones si no tiene permisos
+     private void restriccionesProfesor() {
+        txtDescripcionTecnica.setEditable(false);
+        spinnerHoras.setEnabled(false);
+        cboEstado.setEnabled(false);
+        calendarIni.setEnabled(false);
+        calendarFin1.setEnabled(false);
+        cboUrgencia.setEnabled(false);
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -579,9 +592,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cboUbicacion;
     private javax.swing.JComboBox<String> cboUrgencia;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
@@ -594,6 +605,8 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel labelEstado;
+    private javax.swing.JLabel labelUrgencia;
     private javax.swing.JSpinner spinnerHoras;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextArea txtDescripcionTecnica;
@@ -602,8 +615,6 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextArea txtObservaciones;
     // End of variables declaration//GEN-END:variables
-
-    
-
+   
     
 }

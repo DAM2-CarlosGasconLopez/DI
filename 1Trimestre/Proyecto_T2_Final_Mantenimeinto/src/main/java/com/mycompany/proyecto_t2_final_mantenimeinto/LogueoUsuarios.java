@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -153,6 +154,10 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         // Contraseña
         char[] arrayPaswd = txtPaswwd.getPassword();
         String passwd = new String(arrayPaswd);
+        //Encripto las contraseñas
+        String passEncript = DigestUtils.md5Hex(passwd);
+        System.out.println(passEncript);
+
         
         // Strings
         String user = null;
@@ -193,7 +198,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                             
                         }else{
                             // Si el usuario y contraseña son iguales, entramos a la pantalla
-                            if (txtUsuario.getText().equals(user) && passwd.equals(pas)) {    
+                            if (txtUsuario.getText().equals(user) && passEncript.equals(pas)) {    
                                 
                                 // Mostramos la conexion exitosa y cerramos
                                 JOptionPane.showMessageDialog(this, "Exito");

@@ -20,7 +20,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -28,19 +31,28 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MostrarProfesores extends javax.swing.JDialog {
     Conectar conectar = null;
+    TableRowSorter<TableModel> ordenar;
     
    
-    public MostrarProfesores(java.awt.Frame parent, boolean modal) throws SQLException {
+    public MostrarProfesores(java.awt.Frame parent, boolean modal, int rol) throws SQLException {
         super(parent, modal);
         initComponents();
-        FiltrarCBORefrecar();
+        FiltrarCBORefrescar();
         RefrescarProfesores();
-        crearpopupmenu();
+        
+        // Si es Root Creamos el Poput y mostramos el boton de añadir profesor
+        if (rol == 1) {
+            crearpopupmenu();   
+            btnAddProfesor.setVisible(true);
+        }else{
+            btnAddProfesor.setVisible(false);
+        }
+        
     }
 
     
     // Filtrar
-    public void FiltrarCBORefrecar() throws SQLException{
+    public void FiltrarCBORefrescar() throws SQLException{
         // Conexión
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
@@ -49,28 +61,26 @@ public class MostrarProfesores extends javax.swing.JDialog {
             
             Statement s = conexion.createStatement();
             // Le pasamos la consulta del departamento
-            ResultSet rs = s.executeQuery("SELECT * FROM fp_departamento;");
+            ResultSet rs = s.executeQuery("SELECT departamento_corto FROM fp_departamento;");
             
-            String[] array = new String[2];
+            String[] array = new String[1];
             // Rellenamos el cbo de departamento
             while (rs.next()) {
                array[0] = rs.getString(1);
-               array[1] = rs.getString(2);
-               cboDepartamento.addItem(array[0] + "  " + array[1]);
+               cboDepartamento.addItem(array[0]);
             }
             
             // Consulta de Rol 
-            rs = s.executeQuery("SELECT * FROM fp_rol;");
+            rs = s.executeQuery("SELECT rol FROM fp_rol;");
             
-            array = new String[2];
+            array = new String[1];
             // Recorremos el Rs
             while (rs.next()) {                
                 array[0] = rs.getString(1);
-                array[1] = rs.getString(2);
-                
-                cboRol.addItem(array[0] + "  " + array[1]);
+                cboRol.addItem(array[0]);
             }
             
+            // ComboBox de Activo
             cboActivo.addItem("Activo");
             cboActivo.addItem("No Activo");
             
@@ -127,6 +137,10 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
             // Le ponemos modelo a la tabla
             tableProfesores.setModel(dtm);
+            
+            // Habilitamos la ordenacion
+            ordenar = new TableRowSorter<TableModel>(dtm);
+            tableProfesores.setRowSorter(ordenar);
                                     
         }
         else{
@@ -425,7 +439,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 PreparedStatement s = null;
                 conectar = new Conectar();
                 Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set password = 'IESCH2022' where id_profesor = " + id + ";";                
+                var sql = "update fp_profesor set password = 'c332fde7539a87108ad5e85ae431c697' where id_profesor = " + id + ";";                
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
                 
@@ -656,119 +670,24 @@ public class MostrarProfesores extends javax.swing.JDialog {
 
     // Boton SIN FILTROS
     private void brnSinFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnSinFiltrosActionPerformed
-        try {
-            RefrescarProfesores();
-        } catch (SQLException ex) {
-            Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ordenar.setRowFilter(RowFilter.regexFilter("",1));
     }//GEN-LAST:event_brnSinFiltrosActionPerformed
     // Boton FILTRAR por ROL   
     private void btnRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRolActionPerformed
         
+        ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + cboRol.getSelectedItem().toString(), 5));
     }//GEN-LAST:event_btnRolActionPerformed
     // Boton FILTRAR por ACTIVO
     private void btnActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivoActionPerformed
-        
-        DefaultTableModel dtm = new DefaultTableModel();
-        // Modelo de la tabla
-        dtm.setColumnIdentifiers(new String[]{"Id","Login","Nombre","E-Mail","Activo","Rol","Departamento"});
-        
-        // Conexión
-        conectar = new Conectar();
-        Connection conexion = conectar.getConnection();
-        
-        // Si el valor seleccionado0 en el cbo es Activo...
+      // Si el valor seleccionado0 en el cbo es Activo...
         if (cboActivo.getSelectedItem().equals("Activo")) {
             
+            ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + "Si", 4));
         
-            if (conexion != null) {
-
-
-                try {
-                    Statement s = conexion.createStatement();
-                    // Le pasamos la consulta
-                    ResultSet rs = s.executeQuery("SELECT p.id_profesor, p.login, p.nombre_completo, p.email, if(p.activo = 1,\"Si\",\"No\"),"
-                            + "r.rol,d.departamento_corto\n" +
-                            "FROM fp_profesor p\n" +
-                            "inner join fp_rol r on r.id_rol = p.id_rol\n" +
-                            "inner join fp_departamento d on d.id_departamento = p.id_departamento " +
-                            "where p.activo = 1;");
-                    
-                    // Generamos un array para recoger lo que pedimos en la consulta
-                    String incide[] = new String[7];
-                    //String incide[] = new String[11];
-                    
-                    
-                    while (rs.next()) {
-                        incide[0] = rs.getString(1);
-                        incide[1] = rs.getString(2);
-                        incide[2] = rs.getString(3);
-                        incide[3] = rs.getString(4);
-                        incide[4] = rs.getString(5);
-                        incide[5] = rs.getString(6);
-                        incide[6] = rs.getString(7);
-                        
-                        
-                        // Añadimos una fila a la tabla
-                        dtm.addRow(incide);
-                    }
-                    // Le ponemos modelo a la tabla
-                    tableProfesores.setModel(dtm);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            
-            }else{
-                JOptionPane.showMessageDialog(this, "conexion fallida");
-            }
             
         // Si es No Activo
         }else{
-            if (conexion != null) {
-
-
-                try {
-                    Statement s = conexion.createStatement();
-                    // Le pasamos la consulta
-                    ResultSet rs = s.executeQuery("SELECT p.id_profesor, p.login, p.nombre_completo, p.email, if(p.activo = 1,\"Si\",\"No\"),"
-                            + "r.rol,d.departamento_corto\n" +
-                            "FROM fp_profesor p\n" +
-                            "inner join fp_rol r on r.id_rol = p.id_rol\n" +
-                            "inner join fp_departamento d on d.id_departamento = p.id_departamento " +
-                            "where p.activo = 0 ;");
-                    
-                    // Generamos un array para recoger lo que pedimos en la consulta
-                    String incide[] = new String[7];
-                    //String incide[] = new String[11];
-                    
-                    
-                    while (rs.next()) {
-                        incide[0] = rs.getString(1);
-                        incide[1] = rs.getString(2);
-                        incide[2] = rs.getString(3);
-                        incide[3] = rs.getString(4);
-                        incide[4] = rs.getString(5);
-                        incide[5] = rs.getString(6);
-                        incide[6] = rs.getString(7);
-                        
-                        
-                        // Añadimos una fila a la tabla
-                        dtm.addRow(incide);
-                    }
-                    // Le ponemos modelo a la tabla
-                    tableProfesores.setModel(dtm);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            
-            }else{
-                JOptionPane.showMessageDialog(this, "conexion fallida");
-            }
-            
-            
-        
+            ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + "No", 4));
         }
         
     }//GEN-LAST:event_btnActivoActionPerformed
@@ -776,6 +695,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
     // Boton FILTRAR por DEPARTAMENTO
     private void btnDepaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepaActionPerformed
         
+        ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + cboDepartamento.getSelectedItem().toString(), 6));
     }//GEN-LAST:event_btnDepaActionPerformed
 
 

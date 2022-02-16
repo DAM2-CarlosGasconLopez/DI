@@ -261,7 +261,7 @@ public class AñadirProfesor extends javax.swing.JDialog {
             ps = conexion.prepareStatement(sql);
 
             ps.setString(1, txtLogin.getText());
-            ps.setString(2, "IESCH2022");
+            ps.setString(2, "c332fde7539a87108ad5e85ae431c697");
             ps.setString(3, txtName.getText());
             ps.setString(4, txtEmail.getText());
             ps.setInt(5, activo);

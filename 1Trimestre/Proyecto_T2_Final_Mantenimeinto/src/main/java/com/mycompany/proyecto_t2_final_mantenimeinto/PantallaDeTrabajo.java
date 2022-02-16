@@ -35,10 +35,9 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     Conectar conectar = null;
     int idProfesorGuardar;
     int rol;
+    TableRowSorter<TableModel> rowSorter;
 
-    /**
-     * Creates new form PantallaDeTrabajo
-     */
+   
     public PantallaDeTrabajo(java.awt.Frame parent, boolean modal, int rol, int idProfesor) throws SQLException {
 
         super(parent, modal);
@@ -82,8 +81,9 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     }
 
     // Rol TECNICO
-    private void rolTécnico() {
-        menuAdministrador.setVisible(false);
+    private void rolTécnico() throws SQLException {
+        CargarTodasIncidencias();
+        
     }
 
     // Rol PROFESOR
@@ -93,7 +93,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         CargarProfesorIncidencias(idProfesor);
 
         menuTecnico.setVisible(false);
-        menuAdministrador.setVisible(false);
+        menuTodasIncidencias.setVisible(false);
+        
 
     }
     // Hacemos un SELECT con todas las INCIDENCIAS de un PROFESOR
@@ -103,6 +104,11 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         dtm.setColumnIdentifiers(new String[]{"Id Incidencia", "Creada por", "Descripcion", "Descripción Técnica", "Horas", "Estado", "Lanzamiento Incidencia",
             "Inicio Reparacion", "Fin Reparación", "Nivel", "Clase", "Edificio", "Observaciones"});
 
+        //ELEMENTOS PARA ORDENAR LA TABLA INCIDENCIAS
+        rowSorter = new TableRowSorter<TableModel>(dtm);
+        //Ordenamos la tabla segun las columnas
+        tablaIncidencias.setRowSorter(rowSorter);
+        
         // Conexión
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
@@ -165,7 +171,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
             "Inicio Reparacion", "Fin Reparación", "Nivel", "Clase", "Edificio", "Observaciones"});
         
         //ELEMENTOS PARA ORDENAR LA TABLA INCIDENCIAS
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(dtm);
+        rowSorter = new TableRowSorter<TableModel>(dtm);
         //Ordenamos la tabla segun las columnas
         tablaIncidencias.setRowSorter(rowSorter);
         
@@ -241,14 +247,12 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
-        menuIncidencias = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuIncidencia = new javax.swing.JMenu();
+        menuTodasIncidencias = new javax.swing.JMenuItem();
+        menuMisIncidencias = new javax.swing.JMenuItem();
         menuProfesorado = new javax.swing.JMenu();
+        menuProfesores = new javax.swing.JMenuItem();
         menuTecnico = new javax.swing.JMenu();
-        menuAdministrador = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -272,36 +276,40 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaIncidencias);
 
-        menuIncidencias.setText("Incidencias");
+        menuIncidencia.setText("Incidencias");
 
-        jMenuItem1.setText("Abiertas");
-        menuIncidencias.add(jMenuItem1);
+        menuTodasIncidencias.setText("Todas Incidencias");
+        menuTodasIncidencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTodasIncidenciasActionPerformed(evt);
+            }
+        });
+        menuIncidencia.add(menuTodasIncidencias);
 
-        jMenuItem2.setText("Cerradas");
-        menuIncidencias.add(jMenuItem2);
+        menuMisIncidencias.setText("Mis Incidencias");
+        menuMisIncidencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMisIncidenciasActionPerformed(evt);
+            }
+        });
+        menuIncidencia.add(menuMisIncidencias);
 
-        jMenuBar1.add(menuIncidencias);
+        jMenuBar1.add(menuIncidencia);
 
         menuProfesorado.setText("Profesorado");
+
+        menuProfesores.setText("Lista Profesores");
+        menuProfesores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProfesoresActionPerformed(evt);
+            }
+        });
+        menuProfesorado.add(menuProfesores);
+
         jMenuBar1.add(menuProfesorado);
 
         menuTecnico.setText("Técnico");
         jMenuBar1.add(menuTecnico);
-
-        menuAdministrador.setText("Administrador");
-
-        jMenuItem3.setText("Profesores");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        menuAdministrador.add(jMenuItem3);
-
-        jMenuItem4.setText("Configuracion");
-        menuAdministrador.add(jMenuItem4);
-
-        jMenuBar1.add(menuAdministrador);
 
         setJMenuBar(jMenuBar1);
 
@@ -343,23 +351,35 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
             Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCrearIncidenciaActionPerformed
-   
-    // Mostrar Los Profesores (SOLO ROOT)
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+
+    private void menuProfesoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProfesoresActionPerformed
+        MostrarProfesores mostrarProfesores;
         try {
-            MostrarProfesores nuevoProfesor = new MostrarProfesores(null, true);
-            nuevoProfesor.setVisible(true);
-            if(rol == 3){
-                // Si es profesor cargamos sus incidencias
-                CargarProfesorIncidencias(idProfesorGuardar);
-            }else{
-                CargarTodasIncidencias();                
-            }
+            mostrarProfesores = new MostrarProfesores(null, true, rol);
+            mostrarProfesores.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_menuProfesoresActionPerformed
 
+    // Eliminar Filtro
+    private void menuTodasIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTodasIncidenciasActionPerformed
+        try {
+            CargarTodasIncidencias();
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuTodasIncidenciasActionPerformed
+
+    private void menuMisIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMisIncidenciasActionPerformed
+        try {
+            CargarProfesorIncidencias(idProfesorGuardar);
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuMisIncidenciasActionPerformed
+
+  
     
     
     // POPUP MENU para MODIFICAR las incidencias
@@ -398,7 +418,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                         var idIncidencia = tablaIncidencias.getModel().getValueAt(fila, 0).toString();
                         
                         // Abrimos la pantalla de modificar incidencia pasandole el id
-                        ModificarIncidenciaProfesor modificar = new ModificarIncidenciaProfesor(null, true, idIncidencia);
+                        ModificarIncidenciaProfesor modificar = new ModificarIncidenciaProfesor(null, true, idIncidencia,rol);
                         modificar.setVisible(true);
                         
                         if(rol == 3){
@@ -419,15 +439,13 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearIncidencia;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JMenu menuAdministrador;
-    private javax.swing.JMenu menuIncidencias;
+    private javax.swing.JMenu menuIncidencia;
+    private javax.swing.JMenuItem menuMisIncidencias;
     private javax.swing.JMenu menuProfesorado;
+    private javax.swing.JMenuItem menuProfesores;
     private javax.swing.JMenu menuTecnico;
+    private javax.swing.JMenuItem menuTodasIncidencias;
     private javax.swing.JTable tablaIncidencias;
     // End of variables declaration//GEN-END:variables
 
