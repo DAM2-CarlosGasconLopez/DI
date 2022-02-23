@@ -47,6 +47,19 @@
             <Property name="text" type="java.lang.String" value="T&#xe9;cnico"/>
           </Properties>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="menuVacio">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="                                                                                                                                                                                                                                                                                                                                        "/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu3">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="D:\Users\damA\Downloads\configuraciones (1).png"/>
+            </Property>
+          </Properties>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
@@ -84,7 +97,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jScrollPane1" min="-2" pref="581" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="582" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnCrearIncidencia" min="-2" pref="28" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>

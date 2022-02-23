@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.proyecto_t2_final_mantenimeinto;
+package Incidencias;
 
-import CosasEnRoot.MostrarProfesores;
-import ModificarIncidencias.ModificarIncidenciaProfesor;
+import Incidencias.NuevaIncidencia;
+import MenuProfesores.MostrarProfesores;
+import Incidencias.ModificarIncidenciaProfesor;
+import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -30,7 +32,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author damA
  */
-public class PantallaDeTrabajo extends javax.swing.JDialog {
+public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
     Conectar conectar = null;
     int idProfesorGuardar;
@@ -38,7 +40,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     TableRowSorter<TableModel> rowSorter;
 
    
-    public PantallaDeTrabajo(java.awt.Frame parent, boolean modal, int rol, int idProfesor) throws SQLException {
+    public PantallaMostrarIncidencias(java.awt.Frame parent, boolean modal, int rol, int idProfesor) throws SQLException {
 
         super(parent, modal);
         initComponents();
@@ -253,6 +255,8 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         menuProfesorado = new javax.swing.JMenu();
         menuProfesores = new javax.swing.JMenuItem();
         menuTecnico = new javax.swing.JMenu();
+        menuVacio = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -311,6 +315,13 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         menuTecnico.setText("Técnico");
         jMenuBar1.add(menuTecnico);
 
+        menuVacio.setText("                                                                                                                                                                                                                                                                                                                                        ");
+        menuVacio.setEnabled(false);
+        jMenuBar1.add(menuVacio);
+
+        jMenu3.setIcon(new javax.swing.ImageIcon("D:\\Users\\damA\\Downloads\\configuraciones (1).png")); // NOI18N
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -326,7 +337,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCrearIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6))
@@ -348,7 +359,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                 CargarTodasIncidencias();                
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCrearIncidenciaActionPerformed
 
@@ -358,26 +369,26 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
             mostrarProfesores = new MostrarProfesores(null, true, rol);
             mostrarProfesores.setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_menuProfesoresActionPerformed
+
+    private void menuMisIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMisIncidenciasActionPerformed
+        try {
+            CargarProfesorIncidencias(idProfesorGuardar);
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuMisIncidenciasActionPerformed
 
     // Eliminar Filtro
     private void menuTodasIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTodasIncidenciasActionPerformed
         try {
             CargarTodasIncidencias();
         } catch (SQLException ex) {
-            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_menuTodasIncidenciasActionPerformed
-
-    private void menuMisIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMisIncidenciasActionPerformed
-        try {
-            CargarProfesorIncidencias(idProfesorGuardar);
-        } catch (SQLException ex) {
-            Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_menuMisIncidenciasActionPerformed
 
   
     
@@ -398,10 +409,10 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                     try {
                         PanelModifyIncidencia();
                     } catch (ParseException ex) {
-                        Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(PantallaDeTrabajo.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -410,9 +421,9 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
                int cuentaFilasSeleccionadas = tablaIncidencias.getSelectedRowCount();
 
                 if (cuentaFilasSeleccionadas == 0) {
-                    JOptionPane.showMessageDialog(PantallaDeTrabajo.this , "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(PantallaMostrarIncidencias.this , "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    int resultado = JOptionPane.showConfirmDialog(PantallaDeTrabajo.this, "¿Esta seguro que desea modificar la incidencia?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+                    int resultado = JOptionPane.showConfirmDialog(PantallaMostrarIncidencias.this, "¿Esta seguro que desea modificar la incidencia?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
                     if (resultado == JOptionPane.YES_OPTION) {
                         int fila = tablaIncidencias.getSelectedRow();
                         var idIncidencia = tablaIncidencias.getModel().getValueAt(fila, 0).toString();
@@ -438,6 +449,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearIncidencia;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu menuIncidencia;
@@ -446,6 +458,7 @@ public class PantallaDeTrabajo extends javax.swing.JDialog {
     private javax.swing.JMenuItem menuProfesores;
     private javax.swing.JMenu menuTecnico;
     private javax.swing.JMenuItem menuTodasIncidencias;
+    private javax.swing.JMenu menuVacio;
     private javax.swing.JTable tablaIncidencias;
     // End of variables declaration//GEN-END:variables
 

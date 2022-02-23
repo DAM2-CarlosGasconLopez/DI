@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CosasEnRoot;
+package MenuProfesores;
 
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
-import com.mycompany.proyecto_t2_final_mantenimeinto.NuevaIncidencia;
+import Incidencias.NuevaIncidencia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

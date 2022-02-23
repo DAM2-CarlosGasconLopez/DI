@@ -5,6 +5,7 @@
  */
 package com.mycompany.proyecto_t2_final_mantenimeinto;
 
+import Incidencias.PantallaMostrarIncidencias;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -205,7 +206,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                                 dispose();     
                                 
                                 // Abrimos la pantalla de trabajo pasandole el rol
-                                PantallaDeTrabajo trabajo = new PantallaDeTrabajo(null, true, rol, idProfesor);
+                                PantallaMostrarIncidencias trabajo = new PantallaMostrarIncidencias(null, true, rol, idProfesor);
                                 trabajo.setVisible(true);
                                 
 

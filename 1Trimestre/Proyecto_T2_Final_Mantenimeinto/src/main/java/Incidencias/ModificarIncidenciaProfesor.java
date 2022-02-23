@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package ModificarIncidencias;
+package Incidencias;
 
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
-import com.mycompany.proyecto_t2_final_mantenimeinto.NuevaIncidencia;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
