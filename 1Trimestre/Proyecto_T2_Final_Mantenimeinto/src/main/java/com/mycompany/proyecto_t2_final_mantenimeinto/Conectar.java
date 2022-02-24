@@ -14,7 +14,7 @@ import java.sql.PreparedStatement;
  * @author damA
  */
 public class Conectar {
-    public static final String URL = "jdbc:mysql://servidorifc.iesch.org:3306/mantenimiento_gascon_c";
+    public static final String URL = "jdbc:mysql://servidorifc.iesch.org:8882/mantenimiento_gascon_c";
     public static final String USER = "2_gascon_c";
     public static final String PASS = "gy7f8";
  

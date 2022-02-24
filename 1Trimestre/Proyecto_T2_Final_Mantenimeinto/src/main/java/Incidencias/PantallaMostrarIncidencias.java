@@ -259,14 +259,21 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 153, 153));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnCrearIncidencia.setBackground(new java.awt.Color(0, 153, 153));
         btnCrearIncidencia.setText("Crear Incidencia");
+        btnCrearIncidencia.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         btnCrearIncidencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCrearIncidenciaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCrearIncidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 588, 236, 28));
 
+        tablaIncidencias.setBackground(new java.awt.Color(0, 153, 153));
+        tablaIncidencias.setForeground(new java.awt.Color(255, 255, 255));
         tablaIncidencias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -280,6 +287,13 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaIncidencias);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1247, 580));
+
+        jMenuBar1.setBackground(new java.awt.Color(0, 102, 102));
+        jMenuBar1.setBorder(new javax.swing.border.MatteBorder(null));
+        jMenuBar1.setForeground(new java.awt.Color(0, 102, 102));
+
+        menuIncidencia.setBackground(new java.awt.Color(0, 102, 102));
         menuIncidencia.setText("Incidencias");
 
         menuTodasIncidencias.setText("Todas Incidencias");
@@ -300,6 +314,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         jMenuBar1.add(menuIncidencia);
 
+        menuProfesorado.setBackground(new java.awt.Color(0, 102, 102));
         menuProfesorado.setText("Profesorado");
 
         menuProfesores.setText("Lista Profesores");
@@ -312,36 +327,16 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         jMenuBar1.add(menuProfesorado);
 
+        menuTecnico.setBackground(new java.awt.Color(0, 102, 102));
         menuTecnico.setText("Técnico");
         jMenuBar1.add(menuTecnico);
 
         menuVacio.setText("                                                                                                                                                                                                                                                                                                                                        ");
         menuVacio.setEnabled(false);
         jMenuBar1.add(menuVacio);
-
-        jMenu3.setIcon(new javax.swing.ImageIcon("D:\\Users\\damA\\Downloads\\configuraciones (1).png")); // NOI18N
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnCrearIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1001, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCrearIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
