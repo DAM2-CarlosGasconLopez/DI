@@ -5,6 +5,7 @@
  */
 package Incidencias;
 
+import Ajustes.PantallaAjustes;
 import Incidencias.NuevaIncidencia;
 import MenuProfesores.MostrarProfesores;
 import Incidencias.ModificarIncidenciaProfesor;
@@ -12,11 +13,13 @@ import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,6 +41,10 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     int idProfesorGuardar;
     int rol;
     TableRowSorter<TableModel> rowSorter;
+    DefaultTableModel dtm = new DefaultTableModel();
+    boolean formatoFecha = true;
+    SimpleDateFormat sdtDateLarge = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat sdtDateShort = new SimpleDateFormat("yy/MM/dd");
 
    
     public PantallaMostrarIncidencias(java.awt.Frame parent, boolean modal, int rol, int idProfesor) throws SQLException {
@@ -52,6 +59,12 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
     }
 
+    //
+
+    public void setFormatoFecha(boolean formatoFecha) {
+        this.formatoFecha = formatoFecha;
+    }
+    
     
     // COMPROBACION DEL ROL
     private void comprobarRol(int role, int idProfesor) throws SQLException {
@@ -101,7 +114,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     }
     // Hacemos un SELECT con todas las INCIDENCIAS de un PROFESOR
     private void CargarProfesorIncidencias(int idProfesor) throws SQLException {
-        DefaultTableModel dtm = new DefaultTableModel();
+        
         // Modelo de la tabla
         dtm.setColumnIdentifiers(new String[]{"Id Incidencia", "Creada por", "Descripcion", "Descripción Técnica", "Horas", "Estado", "Lanzamiento Incidencia",
             "Inicio Reparacion", "Fin Reparación", "Nivel", "Clase", "Edificio", "Observaciones"});
@@ -181,6 +194,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         // Conexión
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
+        
 
         if (conexion != null) {
 
@@ -208,9 +222,27 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 incide[3] = rs.getString(4);
                 incide[4] = rs.getString(5);
                 incide[5] = rs.getString(6);
-                incide[6] = rs.getString(7);
-                incide[7] = rs.getString(8);
-                incide[8] = rs.getString(9);
+                //si es tru formtato largo
+                if (formatoFecha) {      
+                    Date fecha = rs.getDate(7); 
+                    incide[6] = (String) sdtDateShort.format(fecha);
+                    //incide[6] = rs.getString(7);
+                  //  Date fecha2 = rs.getDate(8); 
+                  //  incide[7] = (String) sdtDateLarge.format(fecha2);
+                 //   Date fecha3 = rs.getDate(9); 
+                 //   incide[8] = (String) sdtDateLarge.format(fecha3);
+                }else{
+                    
+                    Date fecha = rs.getDate(7); 
+                    incide[6] = (String) sdtDateLarge.format(fecha);
+                    //incide[6] = rs.getString(7);
+                 //   Date fecha2 = rs.getDate(8); 
+                 //   incide[7] = (String) sdtDateShort.format(fecha2);
+                 //   Date fecha3 = rs.getDate(9); 
+                 //   incide[8] = (String) sdtDateShort.format(fecha3);
+                
+                }
+                
                 incide[9] = rs.getString(10);
                 incide[10] = rs.getString(11);
                 incide[11] = rs.getString(12);
@@ -255,8 +287,8 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         menuProfesorado = new javax.swing.JMenu();
         menuProfesores = new javax.swing.JMenuItem();
         menuTecnico = new javax.swing.JMenu();
-        menuVacio = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 153, 153));
@@ -330,11 +362,15 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         menuTecnico.setBackground(new java.awt.Color(0, 102, 102));
         menuTecnico.setText("Técnico");
         jMenuBar1.add(menuTecnico);
-
-        menuVacio.setText("                                                                                                                                                                                                                                                                                                                                        ");
-        menuVacio.setEnabled(false);
-        jMenuBar1.add(menuVacio);
         jMenuBar1.add(jMenu3);
+
+        jMenu1.setText("jMenu1");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -384,6 +420,17 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
             Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_menuTodasIncidenciasActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        // Abrimos la pantalla de modificar incidencia pasandole el id
+        PantallaAjustes ajustes = new PantallaAjustes(this, true);
+        ajustes.setVisible(true);
+        try {
+            CargarTodasIncidencias();
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenu1MouseClicked
 
   
     
@@ -444,6 +491,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearIncidencia;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -453,7 +501,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     private javax.swing.JMenuItem menuProfesores;
     private javax.swing.JMenu menuTecnico;
     private javax.swing.JMenuItem menuTodasIncidencias;
-    private javax.swing.JMenu menuVacio;
     private javax.swing.JTable tablaIncidencias;
     // End of variables declaration//GEN-END:variables
 

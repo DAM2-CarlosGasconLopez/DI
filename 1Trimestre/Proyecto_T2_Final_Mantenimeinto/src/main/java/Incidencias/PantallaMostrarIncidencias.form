@@ -69,13 +69,15 @@
             <Property name="text" type="java.lang.String" value="T&#xe9;cnico"/>
           </Properties>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="menuVacio">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="                                                                                                                                                                                                                                                                                                                                        "/>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu3">
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="jMenu1"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jMenu1MouseClicked"/>
+          </Events>
         </Menu>
       </SubComponents>
     </Menu>
