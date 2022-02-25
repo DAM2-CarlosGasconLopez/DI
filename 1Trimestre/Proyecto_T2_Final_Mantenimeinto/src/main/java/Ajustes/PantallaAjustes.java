@@ -16,12 +16,18 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PantallaAjustes extends javax.swing.JDialog {
     private PantallaMostrarIncidencias pmi;
+    
           
     
     public PantallaAjustes(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         pmi = (PantallaMostrarIncidencias)parent;
         initComponents();
+        if (pmi.isFormatoFecha() == true) {
+            jRadioButton2.setSelected(true);
+        }else{
+            jRadioButton1.setSelected(true);
+        }
         
         
         
@@ -49,6 +55,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
+        btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -129,6 +136,17 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jLabel5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 240, 40, 30));
 
+        btnCerrar.setBackground(new java.awt.Color(0, 102, 102));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Guardar y Salir");
+        btnCerrar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 236, 28));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,7 +155,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
         );
 
         pack();
@@ -154,9 +172,15 @@ public class PantallaAjustes extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+
+        dispose();               
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;

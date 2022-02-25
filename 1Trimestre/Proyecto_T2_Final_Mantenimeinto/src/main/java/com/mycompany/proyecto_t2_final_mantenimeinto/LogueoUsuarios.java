@@ -188,6 +188,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         int actividad = 0;
         int rol = 0;
         int idProfesor = 0;
+        
 
         if (conexion != null) {
             
@@ -230,6 +231,8 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                                 // Abrimos la pantalla de trabajo pasandole el rol
                                 PantallaMostrarIncidencias trabajo = new PantallaMostrarIncidencias(null, true, rol, idProfesor);
                                 trabajo.setVisible(true);
+                                
+                                GuardarUsuario();
                                 
 
                             }

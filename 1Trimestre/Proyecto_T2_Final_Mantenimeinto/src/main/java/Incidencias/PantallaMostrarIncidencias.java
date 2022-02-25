@@ -41,7 +41,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     int idProfesorGuardar;
     int rol;
     TableRowSorter<TableModel> rowSorter;
-    DefaultTableModel dtm = new DefaultTableModel();
+    
     boolean formatoFecha = true;
     SimpleDateFormat sdtDateLarge = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat sdtDateShort = new SimpleDateFormat("yy/MM/dd");
@@ -60,6 +60,10 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     }
 
     //
+    
+    public boolean isFormatoFecha() {
+        return formatoFecha;
+    }
 
     public void setFormatoFecha(boolean formatoFecha) {
         this.formatoFecha = formatoFecha;
@@ -115,6 +119,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Hacemos un SELECT con todas las INCIDENCIAS de un PROFESOR
     private void CargarProfesorIncidencias(int idProfesor) throws SQLException {
         
+        DefaultTableModel dtm = new DefaultTableModel();
         // Modelo de la tabla
         dtm.setColumnIdentifiers(new String[]{"Id Incidencia", "Creada por", "Descripcion", "Descripción Técnica", "Horas", "Estado", "Lanzamiento Incidencia",
             "Inicio Reparacion", "Fin Reparación", "Nivel", "Clase", "Edificio", "Observaciones"});
@@ -154,7 +159,17 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 incide[3] = rs.getString(4);
                 incide[4] = rs.getString(5);
                 incide[5] = rs.getString(6);
-                incide[6] = rs.getString(7);
+                //si es true formato largo
+                if (formatoFecha) {      
+                    Date fecha = rs.getDate(7); 
+                    incide[6] = (String) sdtDateShort.format(fecha);
+                }
+                // Sino formato corto
+                else{                  
+                    Date fecha = rs.getDate(7); 
+                    incide[6] = (String) sdtDateLarge.format(fecha);                
+                
+                }
                 incide[7] = rs.getString(8);
                 incide[8] = rs.getString(9);
                 incide[9] = rs.getString(10);
@@ -222,27 +237,19 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 incide[3] = rs.getString(4);
                 incide[4] = rs.getString(5);
                 incide[5] = rs.getString(6);
-                //si es tru formtato largo
+                //si es true formato largo
                 if (formatoFecha) {      
                     Date fecha = rs.getDate(7); 
                     incide[6] = (String) sdtDateShort.format(fecha);
-                    //incide[6] = rs.getString(7);
-                  //  Date fecha2 = rs.getDate(8); 
-                  //  incide[7] = (String) sdtDateLarge.format(fecha2);
-                 //   Date fecha3 = rs.getDate(9); 
-                 //   incide[8] = (String) sdtDateLarge.format(fecha3);
-                }else{
-                    
+                }
+                // Sino formato corto
+                else{                  
                     Date fecha = rs.getDate(7); 
-                    incide[6] = (String) sdtDateLarge.format(fecha);
-                    //incide[6] = rs.getString(7);
-                 //   Date fecha2 = rs.getDate(8); 
-                 //   incide[7] = (String) sdtDateShort.format(fecha2);
-                 //   Date fecha3 = rs.getDate(9); 
-                 //   incide[8] = (String) sdtDateShort.format(fecha3);
+                    incide[6] = (String) sdtDateLarge.format(fecha);                
                 
                 }
-                
+                incide[7] = rs.getString(8);
+                incide[8] = rs.getString(9);
                 incide[9] = rs.getString(10);
                 incide[10] = rs.getString(11);
                 incide[11] = rs.getString(12);
@@ -364,7 +371,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         jMenuBar1.add(menuTecnico);
         jMenuBar1.add(jMenu3);
 
-        jMenu1.setText("jMenu1");
+        jMenu1.setText("Ajustes");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenu1MouseClicked(evt);
