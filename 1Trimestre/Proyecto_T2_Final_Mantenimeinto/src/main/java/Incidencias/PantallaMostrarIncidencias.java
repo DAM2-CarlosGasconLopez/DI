@@ -10,8 +10,13 @@ import Incidencias.NuevaIncidencia;
 import MenuProfesores.MostrarProfesores;
 import Incidencias.ModificarIncidenciaProfesor;
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -24,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -48,12 +56,25 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
    
     public PantallaMostrarIncidencias(java.awt.Frame parent, boolean modal, int rol, int idProfesor) throws SQLException {
+        
+        
 
         super(parent, modal);
+       
+        Dimension t = Toolkit.getDefaultToolkit().getScreenSize();
+        int ancho=t.width/3;
+        int alto=t.height/3;
+        this.setSize(ancho, alto);
+        this.setLocation(t.width/2-ancho/2,t.height/2-alto/2);
+      
         initComponents();
+        
+        CargarAyuda();
         comprobarRol(rol, idProfesor);
         idProfesorGuardar = idProfesor;
         crearpopupmenu();
+        
+       
         
         // Aqui comrpobaremos el rol que tinen el usuario
 
@@ -382,6 +403,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         setJMenuBar(jMenuBar1);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearIncidenciaActionPerformed
@@ -493,6 +515,31 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 }
             }
         });
+    }
+    
+    private void CargarAyuda() {
+        File fichero = null;
+        String separ = fichero.separator;
+                  
+        fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        URL hsUrl = null;
+        try {
+            
+            hsUrl = fichero.toURI().toURL();
+            HelpSet helsep = new HelpSet(getClass().getClassLoader(), hsUrl);
+            HelpBroker  hp = helsep.createHelpBroker();
+            
+            //hp.enableHelpOnButton(btnAyuda, "aplicacion", helsep);
+            hp.enableHelpKey(this.getRootPane(), "aplicacion", helsep);
+            hp.enableHelpKey(jScrollPane1 , "incidencias", helsep);
+            
+             
+        } catch (HelpSetException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
   
 

@@ -5,10 +5,14 @@
  */
 package MenuProfesores;
 
+import Ajustes.PantallaAjustes;
 import Email.PantallaEmail;
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +20,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -38,6 +45,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
     public MostrarProfesores(java.awt.Frame parent, boolean modal, int rol) throws SQLException {
         super(parent, modal);
         initComponents();
+        CargarAyuda();
         FiltrarCBORefrescar();
         RefrescarProfesores();
         
@@ -90,7 +98,30 @@ public class MostrarProfesores extends javax.swing.JDialog {
         }
     }
    
-    
+    private void CargarAyuda() {
+        File fichero = null;
+        String separ = fichero.separator;
+                  
+        fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        URL hsUrl = null;
+        try {
+            
+            hsUrl = fichero.toURI().toURL();
+            HelpSet helsep = new HelpSet(getClass().getClassLoader(), hsUrl);
+            HelpBroker  hp = helsep.createHelpBroker();
+            
+            //hp.enableHelpOnButton(btnAyuda, "aplicacion", helsep);
+            hp.enableHelpKey(this.getRootPane(), "aplicacion", helsep);
+            hp.enableHelpKey(jPanel2 , "email", helsep);
+            
+             
+        } catch (HelpSetException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
      // Hacemos un SELECT con todas las INCIDENCIAS
     public void RefrescarProfesores() throws SQLException{
