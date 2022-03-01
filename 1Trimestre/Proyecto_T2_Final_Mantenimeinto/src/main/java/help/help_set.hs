@@ -5,7 +5,7 @@
  
 
 <helpset version="1.0">
-        <title>Ejemplo ayuda JavaHelp</title>
+        <title>Ayuda de la app IES Segundo de Chomon</title>
         <maps>
                 <!-- Pagina por defecto al mostrar la ayuda -->
                 <homeID>aplicacion</homeID>

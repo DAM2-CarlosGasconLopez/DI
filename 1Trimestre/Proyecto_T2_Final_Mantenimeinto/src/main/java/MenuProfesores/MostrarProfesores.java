@@ -45,7 +45,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
     public MostrarProfesores(java.awt.Frame parent, boolean modal, int rol) throws SQLException {
         super(parent, modal);
         initComponents();
-        CargarAyuda();
+         /* JavaHelp */  CargarAyuda();
         FiltrarCBORefrescar();
         RefrescarProfesores();
         
@@ -111,7 +111,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             HelpBroker  hp = helsep.createHelpBroker();
             
             //hp.enableHelpOnButton(btnAyuda, "aplicacion", helsep);
-            hp.enableHelpKey(this.getRootPane(), "aplicacion", helsep);
+            hp.enableHelpKey(this.getRootPane(), "email", helsep);
             hp.enableHelpKey(jPanel2 , "email", helsep);
             
              
@@ -732,14 +732,11 @@ public class MostrarProfesores extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

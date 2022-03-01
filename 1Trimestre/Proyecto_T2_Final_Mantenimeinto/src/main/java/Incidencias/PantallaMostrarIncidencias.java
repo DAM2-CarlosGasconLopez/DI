@@ -10,15 +10,17 @@ import Incidencias.NuevaIncidencia;
 import MenuProfesores.MostrarProfesores;
 import Incidencias.ModificarIncidenciaProfesor;
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,12 +34,18 @@ import java.util.logging.Logger;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -61,18 +69,21 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         super(parent, modal);
        
-        Dimension t = Toolkit.getDefaultToolkit().getScreenSize();
-        int ancho=t.width/3;
-        int alto=t.height/3;
-        this.setSize(ancho, alto);
-        this.setLocation(t.width/2-ancho/2,t.height/2-alto/2);
+                Dimension t = Toolkit.getDefaultToolkit().getScreenSize();
+                int ancho=t.width/3;
+                int alto=t.height/3;
+                this.setSize(ancho, alto);
+                this.setLocation(t.width/2-ancho/2,t.height/2-alto/2);
       
         initComponents();
-        
-        CargarAyuda();
+         /* JavaHelp */ CargarAyuda();
         comprobarRol(rol, idProfesor);
         idProfesorGuardar = idProfesor;
         crearpopupmenu();
+        
+        
+        btnVolverGrafico.setVisible(false);
+        jPanel1.setVisible(false);
         
        
         
@@ -123,6 +134,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Rol TECNICO
     private void rolTécnico() throws SQLException {
         CargarTodasIncidencias();
+        menuGrafico.setVisible(false);
         
     }
 
@@ -134,11 +146,21 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         menuTecnico.setVisible(false);
         menuTodasIncidencias.setVisible(false);
+        menuGrafico.setVisible(false);
         
 
     }
     // Hacemos un SELECT con todas las INCIDENCIAS de un PROFESOR
     private void CargarProfesorIncidencias(int idProfesor) throws SQLException {
+        
+        // Escondemos el btn Volver
+        btnVolverGrafico.setVisible(false);
+        // Escondemos el grafico
+        jPanel1.setVisible(false);
+        // Mostramos las incidencias
+        jScrollPane1.setVisible(true);
+        btnCrearIncidencia.setVisible(true);
+        
         
         DefaultTableModel dtm = new DefaultTableModel();
         // Modelo de la tabla
@@ -184,14 +206,16 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 if (formatoFecha) {      
                     Date fecha = rs.getDate(7); 
                     incide[6] = (String) sdtDateShort.format(fecha);
+                    incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
                 }
                 // Sino formato corto
                 else{                  
                     Date fecha = rs.getDate(7); 
-                    incide[6] = (String) sdtDateLarge.format(fecha);                
+                    incide[6] = (String) sdtDateLarge.format(fecha); 
+                    incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
                 
                 }
-                incide[7] = rs.getString(8);
+                //incide[7] = rs.getString(8);
                 incide[8] = rs.getString(9);
                 incide[9] = rs.getString(10);
                 incide[10] = rs.getString(11);
@@ -215,6 +239,15 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     
     // Hacemos un SELECT con todas las INCIDENCIAS para TECNICO y ROOT
     public void CargarTodasIncidencias() throws SQLException {
+        
+        // Escondemos el btn Volver
+        btnVolverGrafico.setVisible(false);
+        // Escondemos el grafico
+        jPanel1.setVisible(false);
+        // Mostramos las incidencias
+        jScrollPane1.setVisible(true);
+        btnCrearIncidencia.setVisible(true);
+        
         DefaultTableModel dtm = new DefaultTableModel();
         
         // Modelo de la tabla
@@ -266,7 +299,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 // Sino formato corto
                 else{                  
                     Date fecha = rs.getDate(7); 
-                    incide[6] = (String) sdtDateLarge.format(fecha);                
+                    incide[6] = (String) sdtDateLarge.format(fecha); 
                 
                 }
                 incide[7] = rs.getString(8);
@@ -308,21 +341,25 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         btnCrearIncidencia = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        labelGrafico = new javax.swing.JLabel();
+        btnVolverGrafico = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIncidencia = new javax.swing.JMenu();
         menuTodasIncidencias = new javax.swing.JMenuItem();
+        menuGrafico = new javax.swing.JMenuItem();
         menuMisIncidencias = new javax.swing.JMenuItem();
         menuProfesorado = new javax.swing.JMenu();
         menuProfesores = new javax.swing.JMenuItem();
         menuTecnico = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        menuAjustes = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 153, 153));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnCrearIncidencia.setBackground(new java.awt.Color(0, 153, 153));
+        btnCrearIncidencia.setBackground(new java.awt.Color(0, 102, 102));
         btnCrearIncidencia.setText("Crear Incidencia");
         btnCrearIncidencia.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         btnCrearIncidencia.addActionListener(new java.awt.event.ActionListener() {
@@ -330,7 +367,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 btnCrearIncidenciaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCrearIncidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 588, 236, 28));
+        getContentPane().add(btnCrearIncidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 590, 236, 28));
 
         tablaIncidencias.setBackground(new java.awt.Color(0, 153, 153));
         tablaIncidencias.setForeground(new java.awt.Color(255, 255, 255));
@@ -349,6 +386,37 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1247, 580));
 
+        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 1238, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 580));
+
+        btnVolverGrafico.setBackground(new java.awt.Color(0, 102, 102));
+        btnVolverGrafico.setText("Volver");
+        btnVolverGrafico.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnVolverGrafico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverGraficoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVolverGrafico, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 590, 236, 28));
+
         jMenuBar1.setBackground(new java.awt.Color(0, 102, 102));
         jMenuBar1.setBorder(new javax.swing.border.MatteBorder(null));
         jMenuBar1.setForeground(new java.awt.Color(0, 102, 102));
@@ -363,6 +431,14 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
             }
         });
         menuIncidencia.add(menuTodasIncidencias);
+
+        menuGrafico.setText("Incidencias Por Mes");
+        menuGrafico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGraficoActionPerformed(evt);
+            }
+        });
+        menuIncidencia.add(menuGrafico);
 
         menuMisIncidencias.setText("Mis Incidencias");
         menuMisIncidencias.addActionListener(new java.awt.event.ActionListener() {
@@ -392,13 +468,13 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         jMenuBar1.add(menuTecnico);
         jMenuBar1.add(jMenu3);
 
-        jMenu1.setText("Ajustes");
-        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+        menuAjustes.setText("Ajustes");
+        menuAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu1MouseClicked(evt);
+                menuAjustesMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuAjustes);
 
         setJMenuBar(jMenuBar1);
 
@@ -450,7 +526,8 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_menuTodasIncidenciasActionPerformed
 
-    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+    // Evento de Ajustes
+    private void menuAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuAjustesMouseClicked
         // Abrimos la pantalla de modificar incidencia pasandole el id
         PantallaAjustes ajustes = new PantallaAjustes(this, true);
         ajustes.setVisible(true);
@@ -459,7 +536,40 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenu1MouseClicked
+    }//GEN-LAST:event_menuAjustesMouseClicked
+
+    // Boton Volver de Grafico
+    private void btnVolverGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverGraficoActionPerformed
+        
+        // Escondemos el btn Volver
+        btnVolverGrafico.setVisible(false);
+        // Escondemos el grafico
+        jPanel1.setVisible(false);
+        // Mostramos las incidencias
+        jScrollPane1.setVisible(true);
+        btnCrearIncidencia.setVisible(true);
+            
+    }//GEN-LAST:event_btnVolverGraficoActionPerformed
+
+    // Menu ir Al grfico
+    private void menuGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGraficoActionPerformed
+        
+        try {
+            mostrarGraficoMes();
+            // Mostramos boton Volver
+            btnVolverGrafico.setVisible(true);
+            // Mostramos el grafico
+            jPanel1.setVisible(true);
+            // Hacemos invisible las incidencias
+            jScrollPane1.setVisible(false);
+            btnCrearIncidencia.setVisible(false);
+            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuGraficoActionPerformed
 
   
     
@@ -541,14 +651,65 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
         
     }
+    
+    // Metodo del grafico
+    public void mostrarGraficoMes() throws SQLException {
+
+        // Conexión
+        conectar = new Conectar();
+        Connection conexion = conectar.getConnection();
+
+        if (conexion != null) {
+
+            try {
+                DefaultCategoryDataset datos = new DefaultCategoryDataset();
+                Statement s = conexion.createStatement();
+                ResultSet rs = s.executeQuery("SELECT MonthName(fecha) AS mes, count(*) AS numFilas FROM man_incidencias GROUP BY mes ORDER BY mes");
+
+                while (rs.next()) {
+                    //dtm.addRow(rs);
+                    datos.setValue(rs.getInt(2), "", rs.getString(1));
+                }
+                //Se crea el gráfico y se asignan algunas caracteristicas
+                JFreeChart grafico_barras = ChartFactory.createBarChart("Incidencias por mes", "Meses", "Numero incidencias", datos, PlotOrientation.VERTICAL, false, false, false);
+
+                //CAMBIAR EL COLOR DE LAS BARRAS 
+
+                BarRenderer r = (BarRenderer) grafico_barras.getCategoryPlot().getRenderer();
+                r.setSeriesPaint(0, Color.cyan);
+
+                //Se guarda el grafico
+                BufferedImage image = grafico_barras.createBufferedImage(labelGrafico.getWidth(), labelGrafico.getHeight());
+
+                //Se crea la imagen y se agrega al label creado desde diseño
+                labelGrafico.setIcon(new ImageIcon(image));
+
+                pack();
+                repaint();
+                
+                
+            } catch (SQLException sQLException) {
+                JOptionPane.showMessageDialog(this, "Datos no cargados");
+            }
+            conexion.close();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Conoxion fallida");
+        }
+
+    }
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearIncidencia;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JButton btnVolverGrafico;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelGrafico;
+    private javax.swing.JMenu menuAjustes;
+    private javax.swing.JMenuItem menuGrafico;
     private javax.swing.JMenu menuIncidencia;
     private javax.swing.JMenuItem menuMisIncidencias;
     private javax.swing.JMenu menuProfesorado;

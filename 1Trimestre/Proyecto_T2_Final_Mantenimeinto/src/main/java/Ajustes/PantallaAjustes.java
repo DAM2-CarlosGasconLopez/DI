@@ -33,11 +33,11 @@ public class PantallaAjustes extends javax.swing.JDialog {
         pmi = (PantallaMostrarIncidencias)parent;
         initComponents();
         
-        CargarAyuda();
+         /* JavaHelp */ CargarAyuda();
         
         
         // Seleccion tipo fecha
-        if (pmi.isFormatoFecha() == true) {
+        if (pmi.isFormatoFecha()) {
             jRadioButton2.setSelected(true);
         }else{
             jRadioButton1.setSelected(true);
@@ -233,8 +233,8 @@ public class PantallaAjustes extends javax.swing.JDialog {
             HelpSet helsep = new HelpSet(getClass().getClassLoader(), hsUrl);
             HelpBroker  hp = helsep.createHelpBroker();
             
-            hp.enableHelpOnButton(btnAyuda, "aplicacion", helsep);
-            hp.enableHelpKey(this.getRootPane(), "aplicacion", helsep);
+            hp.enableHelpOnButton(btnAyuda, "app", helsep);
+            hp.enableHelpKey(this.getRootPane(), "app", helsep);
             //hp.enableHelpKey(JScrollPane , "ventana_principal", helsep);
             
              
