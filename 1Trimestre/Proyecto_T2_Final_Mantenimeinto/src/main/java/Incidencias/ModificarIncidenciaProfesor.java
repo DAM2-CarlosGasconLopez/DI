@@ -66,7 +66,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
       
     }
     
-    
+    // Meter los datos en los objetos para mostrar la incidencia
     private void RefrescarIncidencia(String idIncidencia) throws SQLException, ParseException {
         DefaultTableModel dtm = new DefaultTableModel();
         // Modelo de la tabla
@@ -515,7 +515,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    // Guardar la modificacion de la incidencia
     private void GuardarCamposVariables() {
         descripcion = txtDescripcion.getText();
         descripcionTecnica = txtDescripcionTecnica.getText();
@@ -547,6 +547,7 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
         
     }
     
+    // Actualizamos en la base de datos la modificacion
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
       
         GuardarCamposVariables();

@@ -6,18 +6,32 @@
 package Ajustes;
 
 import Incidencias.PantallaMostrarIncidencias;
+import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -25,6 +39,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PantallaAjustes extends javax.swing.JDialog {
     private PantallaMostrarIncidencias pmi;
+    Conectar conectar = null;
+    Object opcionSeleccionarEstado;
     
           
     
@@ -68,7 +84,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel5 = new javax.swing.JLabel();
+        lblImprimir = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
@@ -149,9 +165,14 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 450, 10));
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 40, 30));
+        lblImprimir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImprimir.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        lblImprimir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblImprimirMouseClicked(evt);
+            }
+        });
+        jPanel1.add(lblImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 40, 40));
 
         btnCerrar.setBackground(new java.awt.Color(0, 102, 102));
         btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
@@ -197,30 +218,54 @@ public class PantallaAjustes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    // Formato fecha 1
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         pmi.setFormatoFecha(false);
         
         
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
+    // Formato fecha 2
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         pmi.setFormatoFecha(true);
         
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
+    //Cerrar Pantalla
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
 
         dispose();               
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    //Boton ayuda JavaHelp
     private void btnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAyudaActionPerformed
         
         
         
     }//GEN-LAST:event_btnAyudaActionPerformed
 
+    //Boton Informes
+    private void lblImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImprimirMouseClicked
+        
+        seleccionarEstado();
+        System.out.println("Ajustes.PantallaAjustes.lblImprimirMouseClicked()"+ opcionSeleccionarEstado);
+        
+        try {
+            
+            metodoCrearInforme();
+            
+            
+        } catch (JRException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_lblImprimirMouseClicked
+
     
+    //Ayuda de JavaHelp
     private void CargarAyuda() {
         File fichero = null;
         String separ = fichero.separator;
@@ -246,7 +291,76 @@ public class PantallaAjustes extends javax.swing.JDialog {
         
     }
     
+    // Metodo para abrir el JOptionPane y seleccionar un estado
+    public void seleccionarEstado() {
+        // Conexión
+        conectar = new Conectar();
+        Connection conexion = conectar.getConnection();
+        
+        PreparedStatement ps = null;
+        
+    
+        ArrayList<String> es = new ArrayList<>();
+        String sql = "SELECT estado FROM man_estado;";
+        try {
+            ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
+            while (rs.next()) {
+                es.add(rs.getString(1));
+            }
+            String[] array = new String[es.size()];
+            array = es.toArray(array);
+            opcionSeleccionarEstado = JOptionPane.showInputDialog(null, "Estado por el que quieres filtrar", "Elige un estado", JOptionPane.QUESTION_MESSAGE, null, array, array[0]);
+            conexion.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void metodoCrearInforme() throws JRException, ClassNotFoundException {
+       
+            //Cargar driver mysql
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Conexión
+            conectar = new Conectar();
+            Connection conexion = conectar.getConnection();
+            // Creamos un Map
+            Map mapParameters = new HashMap();
+
+            String opcionEstado = opcionSeleccionarEstado.toString();
+            
+
+            mapParameters.put("estado", opcionEstado);
+
+            JasperPrint print = JasperFillManager.fillReport(".\\src\\main\\java\\Informes\\InformeIncidencias.jasper", mapParameters, conexion);
+
+            JFileChooser chooser = new JFileChooser();
+
+            //Para que solo de deje escojer archivos pdf
+            chooser.setAcceptAllFileFilterUsed(false);
+            //Ponemos la opcion de pdf en el file chooser 
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.pdf", "pdf");
+            chooser.setFileFilter(filtro);
+
+            //Abrimos el JFileChooser y guardamos el resultado en seleccion
+            int seleccion = chooser.showOpenDialog(this);
+            //Si el usuario ha pulsado la opciÃ³n Aceptar
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                //Guarda la factura creada en el informe en la ruta elegida por el usuario
+                JasperExportManager.exportReportToPdfFile(print, chooser.getSelectedFile().getAbsolutePath() + ".pdf");
+                //Muestra un dialogo
+                JOptionPane.showMessageDialog(this, "Las incidencias han sido imprimidas");
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay fichero selecionado", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+
+        
+    }
+
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAyuda;
     private javax.swing.JButton btnCerrar;
@@ -256,7 +370,6 @@ public class PantallaAjustes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -265,5 +378,8 @@ public class PantallaAjustes extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblImprimir;
     // End of variables declaration//GEN-END:variables
+
+    
 }

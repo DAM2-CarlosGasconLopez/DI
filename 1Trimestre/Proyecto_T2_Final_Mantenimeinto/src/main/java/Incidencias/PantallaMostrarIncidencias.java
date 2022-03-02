@@ -509,6 +509,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_menuProfesoresActionPerformed
 
+    
     private void menuMisIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMisIncidenciasActionPerformed
         try {
             CargarProfesorIncidencias(idProfesorGuardar);
