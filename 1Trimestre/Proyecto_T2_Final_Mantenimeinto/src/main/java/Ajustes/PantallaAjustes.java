@@ -7,7 +7,9 @@ package Ajustes;
 
 import Incidencias.PantallaMostrarIncidencias;
 import com.mycompany.proyecto_t2_final_mantenimeinto.Conectar;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
@@ -252,12 +254,16 @@ public class PantallaAjustes extends javax.swing.JDialog {
         
         try {
             
-            metodoCrearInforme();
+           
+                metodoCrearInforme();
+            
             
             
         } catch (JRException ex) {
             Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -319,7 +325,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
         }
     }
     
-    private void metodoCrearInforme() throws JRException, ClassNotFoundException {
+    private void metodoCrearInforme() throws JRException, ClassNotFoundException, IOException {
        
             //Cargar driver mysql
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -348,8 +354,10 @@ public class PantallaAjustes extends javax.swing.JDialog {
             int seleccion = chooser.showOpenDialog(this);
             //Si el usuario ha pulsado la opciÃ³n Aceptar
             if (seleccion == JFileChooser.APPROVE_OPTION) {
-                //Guarda la factura creada en el informe en la ruta elegida por el usuario
+                //Guarda el informe creada en el informe en la ruta elegida por el usuario
                 JasperExportManager.exportReportToPdfFile(print, chooser.getSelectedFile().getAbsolutePath() + ".pdf");
+                File archivo = new File(chooser.getSelectedFile().getAbsolutePath() + ".pdf");
+                Desktop.getDesktop().open(archivo);
                 //Muestra un dialogo
                 JOptionPane.showMessageDialog(this, "Las incidencias han sido imprimidas");
             } else {

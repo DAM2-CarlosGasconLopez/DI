@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="27ab805e-3173-4275-9fc1-f902e51e05fa">
-	<property name="ireport.zoom" value="1.7715610000000037"/>
+	<property name="ireport.zoom" value="1.1000000000000096"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="estado" class="java.lang.String">
@@ -17,13 +17,15 @@
 		i.fecha_ini_rep,
 		i.fecha_fin_rep,
 		u.urgencia,
-		i.id_ubicacion,
+		ubi.ubicacion,
 		i.observaciones
 FROM man_incidencias i
 INNER JOIN man_estado e on e.id_estado = i.id_estado
 INNER JOIN man_urgencia u on u.id_urgencia = i.nivel_urgencia
 INNER JOIN fp_profesor p on p.id_profesor = i.id_profesor_crea
-WHERE e.estado = $P{estado};]]>
+INNER JOIN man_ubicacion ubi on ubi.id_ubicacion = i.id_ubicacion
+WHERE e.estado = $P{estado}
+ORDER BY i.id_incidencia;]]>
 	</queryString>
 	<field name="id_incidencia" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -55,7 +57,7 @@ WHERE e.estado = $P{estado};]]>
 	<field name="urgencia" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="id_ubicacion" class="java.lang.Integer">
+	<field name="ubicacion" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="observaciones" class="java.lang.String">
@@ -66,75 +68,106 @@ WHERE e.estado = $P{estado};]]>
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement x="7" y="12" width="536" height="52" forecolor="#FF3333" uuid="c88335ee-cd6d-4abc-a95a-ab5bf3273ddd"/>
+			</rectangle>
 			<textField>
-				<reportElement x="121" y="21" width="335" height="20" uuid="30e6c45a-dc2a-47c0-9057-30b9a7e8c5d2"/>
+				<reportElement x="18" y="23" width="515" height="29" forecolor="#FF3333" uuid="30e6c45a-dc2a-47c0-9057-30b9a7e8c5d2"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold" size="18"/>
+				</textElement>
 				<textFieldExpression><![CDATA["INFORME DE INCIDENCIAS FILTRADO POR: "  + $P{estado}.toUpperCase()]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="43" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
 		<band height="61" splitType="Stretch">
+			<rectangle>
+				<reportElement x="9" y="40" width="533" height="20" backcolor="#FF3333" uuid="93e3dcba-ec47-4811-b9a2-b705157784b8"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="107" y="30" width="100" height="20" uuid="c7db351b-17b4-4788-b7d8-6da05b306328"/>
-				<text><![CDATA[CREADA POR]]></text>
+				<reportElement x="63" y="43" width="73" height="17" forecolor="#FFFFFF" uuid="c7db351b-17b4-4788-b7d8-6da05b306328"/>
+				<text><![CDATA[Creada Por]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="221" y="30" width="100" height="20" uuid="6c17bf9c-e7d3-40c0-a803-11423d5be847"/>
-				<text><![CDATA[DESCRIPCION]]></text>
+				<reportElement x="157" y="44" width="75" height="15" forecolor="#FFFFFF" uuid="6c17bf9c-e7d3-40c0-a803-11423d5be847"/>
+				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="30" width="80" height="20" uuid="38186db9-08b1-463b-b42e-5e0859554676"/>
-				<text><![CDATA[ID INCIDENCIA]]></text>
+				<reportElement x="17" y="42" width="27" height="18" forecolor="#FFFFFF" uuid="38186db9-08b1-463b-b42e-5e0859554676"/>
+				<text><![CDATA[Id]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="331" y="30" width="114" height="20" uuid="5899c2c3-a87a-4a99-8802-b2957298f93a"/>
-				<text><![CDATA[Creacion de Incidencia]]></text>
+				<reportElement x="252" y="43" width="81" height="18" forecolor="#FFFFFF" uuid="5899c2c3-a87a-4a99-8802-b2957298f93a"/>
+				<text><![CDATA[Fecha Creacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="30" width="76" height="20" uuid="b54b510c-43c3-4a5d-8a58-f10ec614e6db"/>
-				<text><![CDATA[URGENCIA]]></text>
+				<reportElement x="410" y="44" width="43" height="15" forecolor="#FFFFFF" uuid="b54b510c-43c3-4a5d-8a58-f10ec614e6db"/>
+				<text><![CDATA[Urgencia]]></text>
 			</staticText>
-			<line>
-				<reportElement x="7" y="52" width="536" height="1" uuid="0c3f956e-9966-4379-ade5-5c50a33bb8cf"/>
-			</line>
 			<staticText>
-				<reportElement x="384" y="1" width="100" height="20" uuid="aaaa50a4-1ffa-44a4-837f-e6f1f7a14b02"/>
-				<text><![CDATA[fecha]]></text>
+				<reportElement x="342" y="43" width="33" height="16" forecolor="#FFFFFF" uuid="ed19251e-92ab-4132-8f71-8263a3e7b068"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Horas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="41" width="55" height="20" forecolor="#FFFFFF" uuid="e1a020ae-a32b-4c0e-ac10-7202c7aed917"/>
+				<text><![CDATA[Ubicación]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="56" splitType="Stretch">
-			<textField>
-				<reportElement x="221" y="14" width="100" height="32" uuid="7f96dd49-30d2-4669-a4a1-af2d3bb40478"/>
+		<band height="40" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="157" y="8" width="75" height="28" uuid="7f96dd49-30d2-4669-a4a1-af2d3bb40478"/>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="467" y="14" width="88" height="20" uuid="04081f65-40fe-45d0-a3dc-774d438d0180"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="394" y="8" width="59" height="21" uuid="04081f65-40fe-45d0-a3dc-774d438d0180"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{urgencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="7" y="14" width="80" height="20" uuid="4b790fbd-eab9-412d-9ca3-cd0ce28eb44e"/>
+				<reportElement x="17" y="7" width="37" height="20" uuid="4b790fbd-eab9-412d-9ca3-cd0ce28eb44e"/>
 				<textFieldExpression><![CDATA[$F{id_incidencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="107" y="14" width="100" height="20" uuid="1c068751-6247-466a-ad25-11e07b1c2bf7"/>
+				<reportElement x="63" y="7" width="73" height="20" uuid="1c068751-6247-466a-ad25-11e07b1c2bf7"/>
 				<textFieldExpression><![CDATA[$F{nombre_completo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="331" y="14" width="100" height="20" uuid="8968b992-d5c4-49d1-902b-f1f923fb8235"/>
+				<reportElement x="252" y="8" width="47" height="20" uuid="8968b992-d5c4-49d1-902b-f1f923fb8235"/>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="342" y="8" width="33" height="20" uuid="54a1d3fc-3a72-42ff-a153-11afcd23780b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{horas}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="9" y="39" width="534" height="1" uuid="0c3f956e-9966-4379-ade5-5c50a33bb8cf"/>
+			</line>
+			<textField>
+				<reportElement x="478" y="9" width="44" height="20" uuid="37067563-0833-429a-8cfd-d719f6df2237"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="9" y="0" width="1" height="39" uuid="747cd6e1-5a7e-42a3-9e31-433f292cc4bf"/>
+			</line>
+			<line>
+				<reportElement x="542" y="0" width="1" height="39" uuid="9ee3df7a-f724-4541-8523-bbf614e869d2"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="17" splitType="Stretch"/>
+		<band height="16" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band height="203" splitType="Stretch">
