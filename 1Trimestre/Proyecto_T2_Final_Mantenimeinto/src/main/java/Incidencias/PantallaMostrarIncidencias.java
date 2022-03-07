@@ -69,11 +69,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         super(parent, modal);
        
-                Dimension t = Toolkit.getDefaultToolkit().getScreenSize();
-                int ancho=t.width/3;
-                int alto=t.height/3;
-                this.setSize(ancho, alto);
-                this.setLocation(t.width/2-ancho/2,t.height/2-alto/2);
+                
       
         initComponents();
          /* JavaHelp */ CargarAyuda();
@@ -82,9 +78,20 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         crearpopupmenu();
         
         
-        btnVolverGrafico.setVisible(false);
-        jPanel1.setVisible(false);
+
+        jPanel3.setVisible(false);
         
+        
+        int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+        int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+        System.out.println("MenuProfesores.MostrarProfesores.<init>()" + ancho + "  " + alto);
+          
+        this.setSize(ancho + 4, alto - 35);
+        
+        jPanel3.setSize(ancho - 28, alto - 28);
+        jPanel1.setSize(ancho-28, alto-28);
+        labelGrafico.setSize(ancho -100, alto - 100);
+        //jPanel3.setSize(ancho + 4, alto - 35);
        
         
         // Aqui comrpobaremos el rol que tinen el usuario
@@ -153,13 +160,11 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Hacemos un SELECT con todas las INCIDENCIAS de un PROFESOR
     private void CargarProfesorIncidencias(int idProfesor) throws SQLException {
         
-        // Escondemos el btn Volver
-        btnVolverGrafico.setVisible(false);
+
         // Escondemos el grafico
-        jPanel1.setVisible(false);
+        jPanel3.setVisible(false);
         // Mostramos las incidencias
         jScrollPane1.setVisible(true);
-        btnCrearIncidencia.setVisible(true);
         
         
         DefaultTableModel dtm = new DefaultTableModel();
@@ -206,16 +211,16 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 if (formatoFecha) {      
                     Date fecha = rs.getDate(7); 
                     incide[6] = (String) sdtDateShort.format(fecha);
-                    incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
+                    //incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
                 }
                 // Sino formato corto
                 else{                  
                     Date fecha = rs.getDate(7); 
                     incide[6] = (String) sdtDateLarge.format(fecha); 
-                    incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
+                    //incide[7] = (String) sdtDateLarge.format(rs.getDate(8));
                 
                 }
-                //incide[7] = rs.getString(8);
+                incide[7] = rs.getString(8);
                 incide[8] = rs.getString(9);
                 incide[9] = rs.getString(10);
                 incide[10] = rs.getString(11);
@@ -240,13 +245,11 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Hacemos un SELECT con todas las INCIDENCIAS para TECNICO y ROOT
     public void CargarTodasIncidencias() throws SQLException {
         
-        // Escondemos el btn Volver
-        btnVolverGrafico.setVisible(false);
+
         // Escondemos el grafico
-        jPanel1.setVisible(false);
+        jPanel3.setVisible(false);
         // Mostramos las incidencias
-        jScrollPane1.setVisible(true);
-        btnCrearIncidencia.setVisible(true);
+        panelTodo.setVisible(true);
         
         DefaultTableModel dtm = new DefaultTableModel();
         
@@ -338,12 +341,16 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        panelTodo = new javax.swing.JPanel();
         btnCrearIncidencia = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaIncidencias = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        btnVolverGrafico = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         labelGrafico = new javax.swing.JLabel();
-        btnVolverGrafico = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIncidencia = new javax.swing.JMenu();
         menuTodasIncidencias = new javax.swing.JMenuItem();
@@ -357,7 +364,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 153, 153));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnCrearIncidencia.setBackground(new java.awt.Color(0, 102, 102));
         btnCrearIncidencia.setText("Crear Incidencia");
@@ -367,7 +373,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 btnCrearIncidenciaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCrearIncidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 590, 236, 28));
 
         tablaIncidencias.setBackground(new java.awt.Color(0, 153, 153));
         tablaIncidencias.setForeground(new java.awt.Color(255, 255, 255));
@@ -384,28 +389,26 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaIncidencias);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1247, 580));
-
-        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 1238, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelTodoLayout = new javax.swing.GroupLayout(panelTodo);
+        panelTodo.setLayout(panelTodoLayout);
+        panelTodoLayout.setHorizontalGroup(
+            panelTodoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTodoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(panelTodoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1450, Short.MAX_VALUE)
+                    .addComponent(btnCrearIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+        panelTodoLayout.setVerticalGroup(
+            panelTodoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTodoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCrearIncidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 580));
 
         btnVolverGrafico.setBackground(new java.awt.Color(0, 102, 102));
         btnVolverGrafico.setText("Volver");
@@ -415,7 +418,99 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 btnVolverGraficoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolverGrafico, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 590, 236, 28));
+
+        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(labelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 1107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(labelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(992, Short.MAX_VALUE)
+                .addComponent(btnVolverGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1079, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVolverGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLayeredPane1.setLayer(panelTodo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1441, Short.MAX_VALUE)
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(23, 23, 23)
+                    .addComponent(panelTodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 836, Short.MAX_VALUE)
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(panelTodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1479, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addComponent(jLayeredPane1)
+                    .addGap(0, 0, 0)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jLayeredPane1)
+                    .addContainerGap()))
+        );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 102, 102));
         jMenuBar1.setBorder(new javax.swing.border.MatteBorder(null));
@@ -478,8 +573,24 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         setJMenuBar(jMenuBar1);
 
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(29, 29, 29))
+        );
+
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearIncidenciaActionPerformed
@@ -542,13 +653,12 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Boton Volver de Grafico
     private void btnVolverGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverGraficoActionPerformed
         
-        // Escondemos el btn Volver
-        btnVolverGrafico.setVisible(false);
+
         // Escondemos el grafico
-        jPanel1.setVisible(false);
+        jPanel3.setVisible(false);
         // Mostramos las incidencias
-        jScrollPane1.setVisible(true);
-        btnCrearIncidencia.setVisible(true);
+        panelTodo.setVisible(true);
+
             
     }//GEN-LAST:event_btnVolverGraficoActionPerformed
 
@@ -556,14 +666,20 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     private void menuGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGraficoActionPerformed
         
         try {
+            
             mostrarGraficoMes();
-            // Mostramos boton Volver
-            btnVolverGrafico.setVisible(true);
+            
+        int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+        int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+        System.out.println("MenuProfesores.MostrarProfesores.<init>()" + ancho + "  " + alto);
+          
+        this.setSize(ancho + 4, alto - 35);
+
             // Mostramos el grafico
-            jPanel1.setVisible(true);
+            jPanel3.setVisible(true);
             // Hacemos invisible las incidencias
-            jScrollPane1.setVisible(false);
-            btnCrearIncidencia.setVisible(false);
+            panelTodo.setVisible(false);
+
             
             
             
@@ -679,8 +795,14 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
                 BarRenderer r = (BarRenderer) grafico_barras.getCategoryPlot().getRenderer();
                 r.setSeriesPaint(0, Color.cyan);
 
+                
+                
+                int anchopanel = jPanel1.getWidth();
+                int altopanel = jPanel1.getHeight();
+                System.out.println("Incidencias.PantallaMostrarIncidencias.mostrarGraficoMes()" + anchopanel + "  " + altopanel);
+                labelGrafico.setSize(anchopanel,altopanel -40);
                 //Se guarda el grafico
-                BufferedImage image = grafico_barras.createBufferedImage(labelGrafico.getWidth(), labelGrafico.getHeight());
+                BufferedImage image = grafico_barras.createBufferedImage(anchopanel, altopanel);
 
                 //Se crea la imagen y se agrega al label creado desde diseño
                 labelGrafico.setIcon(new ImageIcon(image));
@@ -704,9 +826,12 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearIncidencia;
     private javax.swing.JButton btnVolverGrafico;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelGrafico;
     private javax.swing.JMenu menuAjustes;
@@ -717,6 +842,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     private javax.swing.JMenuItem menuProfesores;
     private javax.swing.JMenu menuTecnico;
     private javax.swing.JMenuItem menuTodasIncidencias;
+    private javax.swing.JPanel panelTodo;
     private javax.swing.JTable tablaIncidencias;
     // End of variables declaration//GEN-END:variables
 

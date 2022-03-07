@@ -361,6 +361,11 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
 
         btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -603,6 +608,10 @@ public class ModificarIncidenciaProfesor extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "conexion fallida");
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Restricciones si no tiene permisos
      private void restriccionesProfesor() {
