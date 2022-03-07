@@ -46,122 +46,111 @@ import javax.swing.table.TableRowSorter;
  * @author damA
  */
 public class MostrarProfesores extends javax.swing.JDialog {
+
     Conectar conectar = null;
     TableRowSorter<TableModel> ordenar;
-    
-   
+
     public MostrarProfesores(java.awt.Frame parent, boolean modal, int rol) throws SQLException {
         super(parent, modal);
         initComponents();
-         /* JavaHelp */  CargarAyuda();
+        /* JavaHelp */ CargarAyuda();
         FiltrarCBORefrescar();
         RefrescarProfesores();
-        
+
         // Si es Root Creamos el Poput y mostramos el boton de añadir profesor
         if (rol == 1) {
-            crearpopupmenu();   
+            crearpopupmenu();
             btnAddProfesor.setVisible(true);
-        }else{
+        } else {
             btnAddProfesor.setVisible(false);
         }
-        
+
     }
 
-    
     // Filtrar
-    public void FiltrarCBORefrescar() throws SQLException{
+    public void FiltrarCBORefrescar() throws SQLException {
         // Conexión
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
-        
+
         if (conexion != null) {
-            
+
             Statement s = conexion.createStatement();
             // Le pasamos la consulta del departamento
             ResultSet rs = s.executeQuery("SELECT departamento_corto FROM fp_departamento;");
-            
+
             String[] array = new String[1];
             // Rellenamos el cbo de departamento
             while (rs.next()) {
-               array[0] = rs.getString(1);
-               cboDepartamento.addItem(array[0]);
+                array[0] = rs.getString(1);
+                cboDepartamento.addItem(array[0]);
             }
-            
+
             // Consulta de Rol 
             rs = s.executeQuery("SELECT rol FROM fp_rol;");
-            
+
             array = new String[1];
             // Recorremos el Rs
-            while (rs.next()) {                
+            while (rs.next()) {
                 array[0] = rs.getString(1);
                 cboRol.addItem(array[0]);
             }
-            
+
             // ComboBox de Activo
             cboActivo.addItem("Activo");
             cboActivo.addItem("No Activo");
-            
-            
-           
+
         }
     }
-   
+
     private void CargarAyuda() {
         File fichero = null;
         String separ = fichero.separator;
-                  
+
         fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
         URL hsUrl = null;
         try {
-            
+
             hsUrl = fichero.toURI().toURL();
             HelpSet helsep = new HelpSet(getClass().getClassLoader(), hsUrl);
-            HelpBroker  hp = helsep.createHelpBroker();
-            
+            HelpBroker hp = helsep.createHelpBroker();
+
             //hp.enableHelpOnButton(btnAyuda, "aplicacion", helsep);
             hp.enableHelpKey(this.getRootPane(), "email", helsep);
-            hp.enableHelpKey(jPanel2 , "email", helsep);
-            
-             
+            hp.enableHelpKey(jPanel2, "email", helsep);
+
         } catch (HelpSetException ex) {
             Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
             Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-     // Hacemos un SELECT con todas las INCIDENCIAS
-    public void RefrescarProfesores() throws SQLException{
+
+    // Hacemos un SELECT con todas las INCIDENCIAS
+    public void RefrescarProfesores() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
         // Modelo de la tabla
-        dtm.setColumnIdentifiers(new String[]{"Id","Login","Nombre","E-Mail","Activo","Rol","Departamento"});
-        
-        
-        
- 
-        
-       
+        dtm.setColumnIdentifiers(new String[]{"Id", "Login", "Nombre", "E-Mail", "Activo", "Rol", "Departamento"});
+
         // Conexión
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
-        
+
         if (conexion != null) {
-            
-            
+
             Statement s = conexion.createStatement();
             // Le pasamos la consulta
             ResultSet rs = s.executeQuery("SELECT p.id_profesor, p.login, p.nombre_completo, p.email, if(p.activo = 1,\"Si\",\"No\"),"
-                    + "r.rol,d.departamento_corto\n" +
-                      "FROM fp_profesor p\n" +
-                      "inner join fp_rol r on r.id_rol = p.id_rol\n" +
-                      "inner join fp_departamento d on d.id_departamento = p.id_departamento;");
-                   
+                    + "r.rol,d.departamento_corto\n"
+                    + "FROM fp_profesor p\n"
+                    + "inner join fp_rol r on r.id_rol = p.id_rol\n"
+                    + "inner join fp_departamento d on d.id_departamento = p.id_departamento;");
+
             // Generamos un array para recoger lo que pedimos en la consulta
             String incide[] = new String[7];
             //String incide[] = new String[11];
-                       
-           
+
             while (rs.next()) {
                 incide[0] = rs.getString(1);
                 incide[1] = rs.getString(2);
@@ -170,50 +159,46 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 incide[4] = rs.getString(5);
                 incide[5] = rs.getString(6);
                 incide[6] = rs.getString(7);
-                
-              
+
                 // Añadimos una fila a la tabla
                 dtm.addRow(incide);
             }
             // Le ponemos modelo a la tabla
             tableProfesores.setModel(dtm);
-            
+
             // Habilitamos la ordenacion
             ordenar = new TableRowSorter<TableModel>(dtm);
             tableProfesores.setRowSorter(ordenar);
-                                    
-        }
-        else{
+
+        } else {
             JOptionPane.showMessageDialog(this, "conexion fallida");
         }
     }
-    
+
     // POPUP MENU
     private void crearpopupmenu() {
         // Generamos el Poput
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem contraseñaItem = new JMenuItem("Restablecer Contraseña (IESCH2022)");
         JMenuItem activoitem = new JMenuItem("Activo");
-        
+
         JMenu rolProfesor = new JMenu("Cambiar rol");
         JMenuItem root = new JMenuItem("Poner como root");
         JMenuItem tecnico = new JMenuItem("Poner como tecnico");
         JMenuItem profesor = new JMenuItem("Poner como profesor");
 
-       // Añadir Campos al PoputMenu
-               
+        // Añadir Campos al PoputMenu
         popupMenu.add(contraseñaItem);
         popupMenu.add(activoitem);
-        
+
         popupMenu.add(rolProfesor);
-        
+
         rolProfesor.add(root);
         rolProfesor.add(tecnico);
         rolProfesor.add(profesor);
-        
-       
+
         tableProfesores.setComponentPopupMenu(popupMenu);
-       
+
         // Le damos accion a los items del PoputMenu
         contraseñaItem.addActionListener(new ActionListener() {
             @Override
@@ -225,7 +210,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 }
             }
         });
-        
+
         activoitem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -248,9 +233,8 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 }
             }
 
-            
         });
-         
+
         tecnico.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -260,8 +244,8 @@ public class MostrarProfesores extends javax.swing.JDialog {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }); 
-        
+        });
+
         profesor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -271,237 +255,216 @@ public class MostrarProfesores extends javax.swing.JDialog {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }); 
+        });
     }
-    
+
     // cambiar rol a root
-    public void cambiarPorRoot() throws SQLException{
+    public void cambiarPorRoot() throws SQLException {
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
-            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Root?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (resultado==JOptionPane.YES_OPTION) {
+            int resultado = JOptionPane.showConfirmDialog(this, "¿Cambiar a Root?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado == JOptionPane.YES_OPTION) {
                 int fila = tableProfesores.getSelectedRow();
-                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
-               
+                var id = tableProfesores.getModel().getValueAt(fila, 0).toString();
+
                 // Conexiones
                 PreparedStatement s = null;
                 conectar = new Conectar();
-                Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set id_rol = 1 where id_profesor =" + id + ";";                
+                Connection connection = conectar.getConnection();
+                var sql = "update fp_profesor set id_rol = 1 where id_profesor =" + id + ";";
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
-                
+
                 RefrescarProfesores();
-                JOptionPane.showMessageDialog(this,"Operacion Correcta");
-                
-               
-               
-            }else if (resultado==JOptionPane.NO_OPTION) {
-                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Root","",JOptionPane.ERROR_MESSAGE);
-            }
-            else if (resultado==JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Operacion Correcta");
+
+            } else if (resultado == JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Root", "", JOptionPane.ERROR_MESSAGE);
+            } else if (resultado == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada", "", JOptionPane.WARNING_MESSAGE);
             }
         }
-         
+
     }
+
     // cambiar rol a tecnico
-    public void cambiarPorTecnico() throws SQLException{
-        
+    public void cambiarPorTecnico() throws SQLException {
+
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
-            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Tecnico?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (resultado==JOptionPane.YES_OPTION) {
+            int resultado = JOptionPane.showConfirmDialog(this, "¿Cambiar a Tecnico?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado == JOptionPane.YES_OPTION) {
                 int fila = tableProfesores.getSelectedRow();
-                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
-               
+                var id = tableProfesores.getModel().getValueAt(fila, 0).toString();
+
                 // Conexiones
                 PreparedStatement s = null;
                 conectar = new Conectar();
-                Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set id_rol = 2 where id_profesor =" + id + ";";                
+                Connection connection = conectar.getConnection();
+                var sql = "update fp_profesor set id_rol = 2 where id_profesor =" + id + ";";
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
-                
+
                 RefrescarProfesores();
-                JOptionPane.showMessageDialog(this,"Operacion Correcta");
-                
-               
-               
-            }else if (resultado==JOptionPane.NO_OPTION) {
-                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Técnico","",JOptionPane.ERROR_MESSAGE);
-            }
-            else if (resultado==JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Operacion Correcta");
+
+            } else if (resultado == JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Técnico", "", JOptionPane.ERROR_MESSAGE);
+            } else if (resultado == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada", "", JOptionPane.WARNING_MESSAGE);
             }
         }
-         
+
     }
+
     // cambiar rol a profesor
-    public void cambiarPorProfe() throws SQLException{
-         
+    public void cambiarPorProfe() throws SQLException {
+
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
-            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-            int resultado=JOptionPane.showConfirmDialog(this, "¿Cambiar a Profesor?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (resultado==JOptionPane.YES_OPTION) {
+            int resultado = JOptionPane.showConfirmDialog(this, "¿Cambiar a Profesor?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado == JOptionPane.YES_OPTION) {
                 int fila = tableProfesores.getSelectedRow();
-                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
-               
+                var id = tableProfesores.getModel().getValueAt(fila, 0).toString();
+
                 // Conexiones
                 PreparedStatement s = null;
                 conectar = new Conectar();
-                Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set id_rol = 3 where id_profesor =" + id + ";";                
+                Connection connection = conectar.getConnection();
+                var sql = "update fp_profesor set id_rol = 3 where id_profesor =" + id + ";";
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
-                
+
                 RefrescarProfesores();
-                JOptionPane.showMessageDialog(this,"Operacion Correcta");
-                
-                
-                
-               
-               
-            }else if (resultado==JOptionPane.NO_OPTION) {
-                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Profesor","",JOptionPane.ERROR_MESSAGE);
-            }
-            else if (resultado==JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Operacion Correcta");
+
+            } else if (resultado == JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado a Profesor", "", JOptionPane.ERROR_MESSAGE);
+            } else if (resultado == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada", "", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
-    
+
     // mostrar JOptionPane con CheckBox para Activo
-    public void MostrarJOP() throws SQLException{
-        
+    public void MostrarJOP() throws SQLException {
+
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
-            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-                // Sacamos la fila
-                int fila = tableProfesores.getSelectedRow();
-                // Cogemos si es activo o no
-                var activo =tableProfesores.getModel().getValueAt(fila, 4).toString();
-                // Cogemos el id
-                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
-                
-                // Generamos un checkBox
-                JCheckBox check = new JCheckBox("Activo");
-                // Pasamos al check box lo recogido en la tabla
-                if (activo.equals("Si")) {
-                    check.setSelected(true);
-                }else{
-                    check.setSelected(false);
-                }
-                
-                var seleccionado = check.isSelected();
-                
-                // Generamos un mensage
-                String msg = "Cambiar actividad del profesor"; 
+            // Sacamos la fila
+            int fila = tableProfesores.getSelectedRow();
+            // Cogemos si es activo o no
+            var activo = tableProfesores.getModel().getValueAt(fila, 4).toString();
+            // Cogemos el id
+            var id = tableProfesores.getModel().getValueAt(fila, 0).toString();
 
-                // Creamos el objeto con el checkbox + msg
-                Object[] msgContent = {msg,check }; 
-                
-                // JOptionPane para guardar el cambia recien realizado en el checkbox
-                int n = JOptionPane.showConfirmDialog(this,msgContent, "Altas y Bajas",JOptionPane.OK_CANCEL_OPTION);
-                
-                // Conexiones
-                PreparedStatement s = null;
-                conectar = new Conectar();
-                Connection connection = conectar.getConnection();     
-                // Si la respuesta del panel es acepatar, entonces...
-                if (n == 0) {
-                    // Si esta seleccionado el check,...
-                    if (check.isSelected() == true) {
-                        
-                        // si antes era false y ahora es true, confirmamos operacion
-                        if (seleccionado != true) {
-                            // Cambiamos a activo el profesor con el id seleccionado
-                            var sql = "update fp_profesor set activo = 1 where id_profesor =" + id + ";";                
-                            s = connection.prepareStatement(sql);
-                            s.executeUpdate(sql);
+            // Generamos un checkBox
+            JCheckBox check = new JCheckBox("Activo");
+            // Pasamos al check box lo recogido en la tabla
+            if (activo.equals("Si")) {
+                check.setSelected(true);
+            } else {
+                check.setSelected(false);
+            }
 
-                            RefrescarProfesores();
-                            JOptionPane.showMessageDialog(this,"Operacion Correcta");
-                            
-                        }
-                        
-                    // Si no,...
-                    }else{
-                         
-                        // Si antes era true y ahora es false, confirmamos operacion
-                        if (seleccionado != false) {
-                            // Cambiamos a desactivo el profesor con el id seleccionado
-                            var sql = "update fp_profesor set activo = 0 where id_profesor =" + id + ";";                
-                            s = connection.prepareStatement(sql);
-                            s.executeUpdate(sql);
+            var seleccionado = check.isSelected();
 
-                            RefrescarProfesores();
-                            
-                            JOptionPane.showMessageDialog(this,"Operacion Correcta");            
-                        }
+            // Generamos un mensage
+            String msg = "Cambiar actividad del profesor";
+
+            // Creamos el objeto con el checkbox + msg
+            Object[] msgContent = {msg, check};
+
+            // JOptionPane para guardar el cambia recien realizado en el checkbox
+            int n = JOptionPane.showConfirmDialog(this, msgContent, "Altas y Bajas", JOptionPane.OK_CANCEL_OPTION);
+
+            // Conexiones
+            PreparedStatement s = null;
+            conectar = new Conectar();
+            Connection connection = conectar.getConnection();
+            // Si la respuesta del panel es acepatar, entonces...
+            if (n == 0) {
+                // Si esta seleccionado el check,...
+                if (check.isSelected() == true) {
+
+                    // si antes era false y ahora es true, confirmamos operacion
+                    if (seleccionado != true) {
+                        // Cambiamos a activo el profesor con el id seleccionado
+                        var sql = "update fp_profesor set activo = 1 where id_profesor =" + id + ";";
+                        s = connection.prepareStatement(sql);
+                        s.executeUpdate(sql);
+
+                        RefrescarProfesores();
+                        JOptionPane.showMessageDialog(this, "Operacion Correcta");
+
                     }
-                   
-                
+
+                    // Si no,...
+                } else {
+
+                    // Si antes era true y ahora es false, confirmamos operacion
+                    if (seleccionado != false) {
+                        // Cambiamos a desactivo el profesor con el id seleccionado
+                        var sql = "update fp_profesor set activo = 0 where id_profesor =" + id + ";";
+                        s = connection.prepareStatement(sql);
+                        s.executeUpdate(sql);
+
+                        RefrescarProfesores();
+
+                        JOptionPane.showMessageDialog(this, "Operacion Correcta");
+                    }
                 }
-               
-                
-                
-                
-            
+
+            }
+
         }
-   
+
     }
-    
+
     // cambiar contraseña profesor
-    public void ReestablecerContraseñaPOP() throws SQLException{
+    public void ReestablecerContraseñaPOP() throws SQLException {
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
         if (cuentaFilasSeleccionadas == 0) {
-            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas","Error",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "No hay filas seleccionadas", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-            int resultado=JOptionPane.showConfirmDialog(this, "¿Esta seguro que desea Reestablecer la contraseña?","¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
-            if (resultado==JOptionPane.YES_OPTION) {
+            int resultado = JOptionPane.showConfirmDialog(this, "¿Esta seguro que desea Reestablecer la contraseña?", "¿Seguro?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (resultado == JOptionPane.YES_OPTION) {
                 int fila = tableProfesores.getSelectedRow();
-                var id =tableProfesores.getModel().getValueAt(fila, 0).toString();
-               
+                var id = tableProfesores.getModel().getValueAt(fila, 0).toString();
+
                 // Conexiones
                 PreparedStatement s = null;
                 conectar = new Conectar();
-                Connection connection = conectar.getConnection();               
-                var sql = "update fp_profesor set password = 'c332fde7539a87108ad5e85ae431c697' where id_profesor = " + id + ";";                
+                Connection connection = conectar.getConnection();
+                var sql = "update fp_profesor set password = 'c332fde7539a87108ad5e85ae431c697' where id_profesor = " + id + ";";
                 s = connection.prepareStatement(sql);
                 s.executeUpdate(sql);
-                
+
                 RefrescarProfesores();
-                JOptionPane.showMessageDialog(this,"Operacion Correcta");
-                
-               
-               
-            }else if (resultado==JOptionPane.NO_OPTION) {
-                JOptionPane.showConfirmDialog(this, "No se ha cambiado la contraseña","",JOptionPane.ERROR_MESSAGE);
-            }
-            else if (resultado==JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showConfirmDialog(this, "Operacion cancelada","",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Operacion Correcta");
+
+            } else if (resultado == JOptionPane.NO_OPTION) {
+                JOptionPane.showConfirmDialog(this, "No se ha cambiado la contraseña", "", JOptionPane.ERROR_MESSAGE);
+            } else if (resultado == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showConfirmDialog(this, "Operacion cancelada", "", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
     // Fin POPUT
-    
-    
-    
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -816,31 +779,30 @@ public class MostrarProfesores extends javax.swing.JDialog {
 
     // Boton SIN FILTROS
     private void brnSinFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnSinFiltrosActionPerformed
-        ordenar.setRowFilter(RowFilter.regexFilter("",1));
+        ordenar.setRowFilter(RowFilter.regexFilter("", 1));
     }//GEN-LAST:event_brnSinFiltrosActionPerformed
     // Boton FILTRAR por ROL   
     private void btnRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRolActionPerformed
-        
+
         ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + cboRol.getSelectedItem().toString(), 5));
     }//GEN-LAST:event_btnRolActionPerformed
     // Boton FILTRAR por ACTIVO
     private void btnActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivoActionPerformed
-      // Si el valor seleccionado0 en el cbo es Activo...
+        // Si el valor seleccionado0 en el cbo es Activo...
         if (cboActivo.getSelectedItem().equals("Activo")) {
-            
+
             ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + "Si", 4));
-        
-            
-        // Si es No Activo
-        }else{
+
+            // Si es No Activo
+        } else {
             ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + "No", 4));
         }
-        
+
     }//GEN-LAST:event_btnActivoActionPerformed
 
     // Boton FILTRAR por DEPARTAMENTO
     private void btnDepaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepaActionPerformed
-        
+
         ordenar.setRowFilter(RowFilter.regexFilter("(?i)" + cboDepartamento.getSelectedItem().toString(), 6));
     }//GEN-LAST:event_btnDepaActionPerformed
 
@@ -856,45 +818,44 @@ public class MostrarProfesores extends javax.swing.JDialog {
 
     // Boton exportar a la base de datos
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
-        
-        JFileChooser fileChooser = new JFileChooser();
-            //Para que solo de deje escojer archivos csv
-            fileChooser.setAcceptAllFileFilterUsed(false);
-            //Ponemos la opcion de csv en el file chooser 
-            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.csv", "csv");
-            fileChooser.setFileFilter(filtro);
-            fileChooser.showOpenDialog(fileChooser);
 
-            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
-        
-        
+        JFileChooser fileChooser = new JFileChooser();
+        //Para que solo de deje escojer archivos csv
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        //Ponemos la opcion de csv en el file chooser 
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.csv", "csv");
+        fileChooser.setFileFilter(filtro);
+        fileChooser.showOpenDialog(fileChooser);
+
+        String ruta = fileChooser.getSelectedFile().getAbsolutePath();
+
         try {
 
-        TableModel model = tableProfesores.getModel();
-        
-        FileWriter csv = new FileWriter(new File(ruta));
+            TableModel model = tableProfesores.getModel();
 
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            csv.write(model.getColumnName(i) + ",");
-        }
+            FileWriter csv = new FileWriter(new File(ruta));
 
-        csv.write("\n");
-
-        for (int i = 0; i < model.getRowCount() - 1; i++) {
-            for (int j = 0; j < model.getColumnCount() - 1; j++) {
-                System.out.println(model.getValueAt(i, j).toString());
-                csv.write(model.getValueAt(i, j).toString() + ",");
-
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                csv.write(model.getColumnName(i) + ",");
             }
+
             csv.write("\n");
+
+            for (int i = 0; i < model.getRowCount() - 1; i++) {
+                for (int j = 0; j < model.getColumnCount() - 1; j++) {
+                    System.out.println(model.getValueAt(i, j).toString());
+                    csv.write(model.getValueAt(i, j).toString() + ",");
+
+                }
+                csv.write("\n");
+            }
+
+            csv.close();
+            
+        } catch (IOException e) {
+            System.out.println(" Error al exportar ");
         }
 
-        csv.close();
-        return true;
-    } catch (IOException e) {
-
-    }
-        
     }//GEN-LAST:event_btnExportarActionPerformed
 
     // Boton importar a la base de datos
@@ -902,10 +863,10 @@ public class MostrarProfesores extends javax.swing.JDialog {
         // Conexion
         conectar = new Conectar();
         Connection conexion = conectar.getConnection();
-        
-         try {
 
-             JFileChooser fileChooser = new JFileChooser();
+        try {
+
+            JFileChooser fileChooser = new JFileChooser();
             //Para que solo de deje escojer archivos csv
             fileChooser.setAcceptAllFileFilterUsed(false);
             //Ponemos la opcion de csv en el file chooser 
@@ -914,31 +875,29 @@ public class MostrarProfesores extends javax.swing.JDialog {
             fileChooser.showOpenDialog(fileChooser);
 
             String ruta = fileChooser.getSelectedFile().getAbsolutePath();
-             
-             
+
             CSVReader reader = new CSVReader(new FileReader(ruta));
-             System.out.println(reader);
-             System.out.println(ruta);
-            
+            System.out.println(reader);
+            System.out.println(ruta);
+
             // Hacemos una lista de strings para guardar lo del archivo
             List<String[]> entrada = reader.readAll();
-            
 
             // Creamos un array para separar una linea del csv
             String[] separador;
-             System.out.println(entrada.size());
-            
+            System.out.println(entrada.size());
+
             for (int j = 1; j < entrada.size(); j++) {
-                
+
                 // Recogemos los datos y los metemos en el array separador dividido por comas
                 String[] palabra = new String[6];
-                palabra = entrada.get(j);                
+                palabra = entrada.get(j);
                 separador = palabra[0].split(",");
-                
+
                 // Le pasamos la consulta              
-                String sql ="insert into fp_profesor (login,password,nombre_completo,email,activo,id_rol,id_departamento)\n" +
-                            "values (?,?,?,?,?,?,?);";
-               
+                String sql = "insert into fp_profesor (login,password,nombre_completo,email,activo,id_rol,id_departamento)\n"
+                        + "values (?,?,?,?,?,?,?);";
+
                 PreparedStatement ps = null;
                 ps = conexion.prepareStatement(sql);
 
@@ -949,27 +908,23 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 ps.setString(5, separador[3]);
                 ps.setString(6, separador[4]);
                 ps.setString(7, separador[5]);
-                
+
                 // Ejecutamos la consulta
                 ps.executeUpdate();
-                
+
             }
 
-           //tableProfesores.setModel(dtm);
-           RefrescarProfesores();
-           
+            //tableProfesores.setModel(dtm);
+            RefrescarProfesores();
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | SQLException ex) {
             Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-         
-        
-    }//GEN-LAST:event_btnImportarActionPerformed
 
-    
-    
+
+    }//GEN-LAST:event_btnImportarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
