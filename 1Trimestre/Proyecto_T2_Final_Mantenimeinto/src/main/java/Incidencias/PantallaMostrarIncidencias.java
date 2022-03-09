@@ -84,7 +84,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         
         int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
         int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-        System.out.println("MenuProfesores.MostrarProfesores.<init>()" + ancho + "  " + alto);
           
         this.setSize(ancho + 4, alto - 35);
         
@@ -151,7 +150,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         // Cargamos las incidencias del propio profesor
         CargarProfesorIncidencias(idProfesor);
 
-        menuTecnico.setVisible(false);
+        
         menuTodasIncidencias.setVisible(false);
         menuGrafico.setVisible(false);
         
@@ -358,8 +357,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         menuMisIncidencias = new javax.swing.JMenuItem();
         menuProfesorado = new javax.swing.JMenu();
         menuProfesores = new javax.swing.JMenuItem();
-        menuTecnico = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
         menuAjustes = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -558,11 +555,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
 
         jMenuBar1.add(menuProfesorado);
 
-        menuTecnico.setBackground(new java.awt.Color(0, 102, 102));
-        menuTecnico.setText("Técnico");
-        jMenuBar1.add(menuTecnico);
-        jMenuBar1.add(jMenu3);
-
         menuAjustes.setText("Ajustes");
         menuAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -591,8 +583,10 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    // Boton de crear una incidencia comprobando el rol
     private void btnCrearIncidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearIncidenciaActionPerformed
 
         try {
@@ -610,6 +604,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnCrearIncidenciaActionPerformed
 
+    // boton mostrar los profesores
     private void menuProfesoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProfesoresActionPerformed
         MostrarProfesores mostrarProfesores;
         try {
@@ -620,7 +615,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_menuProfesoresActionPerformed
 
-    
+    // boton ver mis incidencias 
     private void menuMisIncidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMisIncidenciasActionPerformed
         try {
             CargarProfesorIncidencias(idProfesorGuardar);
@@ -641,10 +636,14 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     // Evento de Ajustes
     private void menuAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuAjustesMouseClicked
         // Abrimos la pantalla de modificar incidencia pasandole el id
-        PantallaAjustes ajustes = new PantallaAjustes(this, true);
+        PantallaAjustes ajustes = new PantallaAjustes(this, true, idProfesorGuardar);
         ajustes.setVisible(true);
         try {
-            CargarTodasIncidencias();
+            if (rol == 3) {
+                CargarProfesorIncidencias(idProfesorGuardar);
+            }else{
+                CargarTodasIncidencias();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(PantallaMostrarIncidencias.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -688,9 +687,7 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_menuGraficoActionPerformed
 
-  
-    
-    
+
     // POPUP MENU para MODIFICAR las incidencias
     private void crearpopupmenu() {
         JPopupMenu popupMenu = new JPopupMenu();
@@ -744,11 +741,12 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
         });
     }
     
+    // Ayuda JavaHelp
     private void CargarAyuda() {
         File fichero = null;
         String separ = fichero.separator;
-                  
-        fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        //fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        fichero = new File("help_set.hs");
         URL hsUrl = null;
         try {
             
@@ -827,7 +825,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     private javax.swing.JButton btnCrearIncidencia;
     private javax.swing.JButton btnVolverGrafico;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -840,7 +837,6 @@ public class PantallaMostrarIncidencias extends javax.swing.JDialog {
     private javax.swing.JMenuItem menuMisIncidencias;
     private javax.swing.JMenu menuProfesorado;
     private javax.swing.JMenuItem menuProfesores;
-    private javax.swing.JMenu menuTecnico;
     private javax.swing.JMenuItem menuTodasIncidencias;
     private javax.swing.JPanel panelTodo;
     private javax.swing.JTable tablaIncidencias;

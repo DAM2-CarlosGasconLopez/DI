@@ -62,6 +62,11 @@ public class MostrarProfesores extends javax.swing.JDialog {
             crearpopupmenu();
             btnAddProfesor.setVisible(true);
         } else {
+            btnImportar.setVisible(false);
+            btnExportar.setVisible(false);
+            lblCSV.setVisible(false);
+            lblRAYA.setVisible(false);
+            lblraya2.setVisible(false);
             btnAddProfesor.setVisible(false);
         }
         
@@ -113,8 +118,8 @@ public class MostrarProfesores extends javax.swing.JDialog {
     private void CargarAyuda() {
         File fichero = null;
         String separ = fichero.separator;
-
-        fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        //fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        fichero = new File("help_set.hs");
         URL hsUrl = null;
         try {
 
@@ -211,6 +216,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
+                    // Reestablecer contraseña
                     ReestablecerContraseñaPOP();
                 } catch (SQLException ex) {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
@@ -222,6 +228,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
+                    // JOptioPane del Acticvo
                     MostrarJOP();
                 } catch (SQLException ex) {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,6 +241,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
+                    // Cambiar Rol
                     cambiarPorRoot();
                 } catch (SQLException ex) {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,6 +254,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
+                    // Cambair a tecnico Poput
                     cambiarPorTecnico();
                 } catch (SQLException ex) {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
@@ -257,6 +266,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
+                    // Cambiar a profesor Poput
                     cambiarPorProfe();
                 } catch (SQLException ex) {
                     Logger.getLogger(MostrarProfesores.class.getName()).log(Level.SEVERE, null, ex);
@@ -265,7 +275,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
         });
     }
 
-    // cambiar rol a root
+    // cambiar rol a root 
     public void cambiarPorRoot() throws SQLException {
         int cuentaFilasSeleccionadas = tableProfesores.getSelectedRowCount();
 
@@ -491,11 +501,11 @@ public class MostrarProfesores extends javax.swing.JDialog {
         btnDepa = new javax.swing.JButton();
         brnSinFiltros = new javax.swing.JButton();
         btnAddProfesor = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        lblRAYA = new javax.swing.JLabel();
         btnEnviarEmail = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
+        lblraya2 = new javax.swing.JLabel();
         btnExportar = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
+        lblCSV = new javax.swing.JLabel();
         btnImportar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -570,8 +580,8 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel7.setText("-------------------------------");
+        lblRAYA.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblRAYA.setText("-------------------------------");
 
         btnEnviarEmail.setBackground(new java.awt.Color(255, 255, 255));
         btnEnviarEmail.setText("E-Mail");
@@ -582,8 +592,8 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setText("-------------------------------");
+        lblraya2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblraya2.setText("-------------------------------");
 
         btnExportar.setBackground(new java.awt.Color(255, 255, 255));
         btnExportar.setText("Exportar");
@@ -594,11 +604,11 @@ public class MostrarProfesores extends javax.swing.JDialog {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("CSV");
-        jLabel9.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        lblCSV.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblCSV.setForeground(new java.awt.Color(255, 255, 255));
+        lblCSV.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCSV.setText("CSV");
+        lblCSV.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
 
         btnImportar.setBackground(new java.awt.Color(255, 255, 255));
         btnImportar.setText("Importar");
@@ -619,7 +629,7 @@ public class MostrarProfesores extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblraya2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(brnSinFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -641,10 +651,10 @@ public class MostrarProfesores extends javax.swing.JDialog {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblCSV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblRAYA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -683,15 +693,15 @@ public class MostrarProfesores extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addComponent(brnSinFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addComponent(lblRAYA, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(btnAddProfesor, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(btnEnviarEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(lblraya2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(lblCSV, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -970,15 +980,15 @@ public class MostrarProfesores extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCSV;
+    private javax.swing.JLabel lblRAYA;
+    private javax.swing.JLabel lblraya2;
     private javax.swing.JTable tableProfesores;
     // End of variables declaration//GEN-END:variables
 }

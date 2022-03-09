@@ -15,6 +15,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,17 +24,20 @@ import java.util.logging.Logger;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -43,13 +47,15 @@ public class PantallaAjustes extends javax.swing.JDialog {
     private PantallaMostrarIncidencias pmi;
     Conectar conectar = null;
     Object opcionSeleccionarEstado;
+    int id_profesor;
     
           
     
-    public PantallaAjustes(java.awt.Dialog parent, boolean modal) {
+    public PantallaAjustes(java.awt.Dialog parent, boolean modal, int id) {
         super(parent, modal);
         pmi = (PantallaMostrarIncidencias)parent;
         initComponents();
+        id_profesor = id;
         
          /* JavaHelp */ CargarAyuda();
         
@@ -82,7 +88,6 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
@@ -91,6 +96,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jSeparator3 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         btnAyuda = new javax.swing.JButton();
+        btnCambiarContraseña = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -104,7 +110,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
                 jRadioButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, -1, -1));
+        jPanel1.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, -1, -1));
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Largo ( 02/10/2002 )");
@@ -113,7 +119,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
                 jRadioButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, -1, -1));
+        jPanel1.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -152,9 +158,6 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jLabel3.setText("Formato De Fechas");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
-        jCheckBox1.setText("Guardar");
-        jPanel1.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, -1, 30));
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Ayuda de la App");
@@ -167,14 +170,18 @@ public class PantallaAjustes extends javax.swing.JDialog {
         jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 450, 10));
 
+        lblImprimir.setBackground(new java.awt.Color(0, 102, 102));
+        lblImprimir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblImprimir.setForeground(new java.awt.Color(255, 255, 255));
         lblImprimir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImprimir.setText("IMPRIMIR");
         lblImprimir.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         lblImprimir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblImprimirMouseClicked(evt);
             }
         });
-        jPanel1.add(lblImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 40, 40));
+        jPanel1.add(lblImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 300, 200, 30));
 
         btnCerrar.setBackground(new java.awt.Color(0, 102, 102));
         btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
@@ -193,7 +200,7 @@ public class PantallaAjustes extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Guardar Contraseña");
+        jLabel6.setText("Cambiar Mi Contraseña");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
         btnAyuda.setBackground(new java.awt.Color(0, 102, 102));
@@ -205,7 +212,18 @@ public class PantallaAjustes extends javax.swing.JDialog {
                 btnAyudaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAyuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 240, 230, 28));
+        jPanel1.add(btnAyuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 240, 200, 28));
+
+        btnCambiarContraseña.setBackground(new java.awt.Color(0, 102, 102));
+        btnCambiarContraseña.setForeground(new java.awt.Color(255, 255, 255));
+        btnCambiarContraseña.setText("Cambiar");
+        btnCambiarContraseña.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnCambiarContraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarContraseñaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCambiarContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 28));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -250,7 +268,6 @@ public class PantallaAjustes extends javax.swing.JDialog {
     private void lblImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImprimirMouseClicked
         
         seleccionarEstado();
-        System.out.println("Ajustes.PantallaAjustes.lblImprimirMouseClicked()"+ opcionSeleccionarEstado);
         
         try {
             
@@ -270,13 +287,74 @@ public class PantallaAjustes extends javax.swing.JDialog {
         
     }//GEN-LAST:event_lblImprimirMouseClicked
 
+    // Boton Cmabiar contraseña segun Id
+    private void btnCambiarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarContraseñaActionPerformed
+       
+            // Generamos un JTextField
+            JTextField field = new JTextField();
+ 
+            // Generamos un mensage
+            String msg = "Cambiar contraseña";
+
+            // Creamos el objeto con el field + msg
+            Object[] msgContent = {msg, field};
+
+            // JOptionPane para guardar el cambio recien realizado en el JTextField
+            int n = JOptionPane.showConfirmDialog(this, msgContent, "Contraeña", JOptionPane.OK_CANCEL_OPTION);
+
+            // Conexiones
+            PreparedStatement s = null;
+            conectar = new Conectar();
+            Connection connection = conectar.getConnection();
+            // Si la respuesta del panel es acepatar, entonces...
+            if (n == 0) {
+                // Si esta seleccionado el check,...
+                if (!field.getText().equals("")) {
+
+                    
+                    try {
+                        
+                        String passEncript = DigestUtils.md5Hex(field.getText().toString());
+                        System.out.println(passEncript);
+                        
+                        
+                        // Cambiamos a activo el profesor con el id seleccionado
+                        var sql = "update fp_profesor set password ='" + passEncript + "' where id_profesor =" + id_profesor + ";";
+                        s = connection.prepareStatement(sql);
+                        s.executeUpdate(sql);
+
+                        JOptionPane.showMessageDialog(this, "Contraseña cambiada Correctamente");
+                        
+                        
+                        
+                        // Si no,...
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PantallaAjustes.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+
+                        JOptionPane.showMessageDialog(this, "Operacion Cancelada");
+                }
+                
+               // Si la respuesta es cancelar
+            } else {
+                 JOptionPane.showMessageDialog(this, "Operacion Cancelada");
+            }
+            
+
+        
+
+            
+    }//GEN-LAST:event_btnCambiarContraseñaActionPerformed
+
     
     //Ayuda de JavaHelp
     private void CargarAyuda() {
         File fichero = null;
         String separ = fichero.separator;
                   
-        fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
+        fichero = new File("help_set.hs");
+        //fichero = new File("src" + separ + "main" + separ + "java" + separ + "help" + separ + "help_set.hs");
         URL hsUrl = null;
         try {
             
@@ -340,7 +418,8 @@ public class PantallaAjustes extends javax.swing.JDialog {
 
             mapParameters.put("estado", opcionEstado);
 
-            JasperPrint print = JasperFillManager.fillReport(".\\src\\main\\java\\Informes\\InformeIncidencias.jasper", mapParameters, conexion);
+            JasperPrint print = JasperFillManager.fillReport("InformeIncidencias.jasper", mapParameters, conexion);
+            //JasperPrint print = JasperFillManager.fillReport(".\\src\\main\\java\\Informes\\InformeIncidencias.jasper", mapParameters, conexion);
 
             JFileChooser chooser = new JFileChooser();
 
@@ -371,9 +450,9 @@ public class PantallaAjustes extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAyuda;
+    private javax.swing.JButton btnCambiarContraseña;
     private javax.swing.JButton btnCerrar;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
