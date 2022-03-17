@@ -35,6 +35,7 @@ public class LogueoUsuarios extends javax.swing.JFrame {
     
     public LogueoUsuarios(){  
         try {
+            
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             
         } catch (ClassNotFoundException ex) {
@@ -82,7 +83,6 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtUsuario.setText("cgasconl");
         txtUsuario.setToolTipText("Ej: cgasconl");
 
         labelUser.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -94,7 +94,6 @@ public class LogueoUsuarios extends javax.swing.JFrame {
         labelPasswd.setText("Contraseña");
 
         txtPaswwd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtPaswwd.setText("Admin1234");
 
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -270,6 +269,8 @@ public class LogueoUsuarios extends javax.swing.JFrame {
                                 //GuardarUsuario();
                                 
 
+                            }else{
+                                JOptionPane.showMessageDialog(this, "Comprueba el usuario y contraseña");
                             }
                         }
                     }
